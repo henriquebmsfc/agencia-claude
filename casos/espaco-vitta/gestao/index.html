@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Espaço Vitta — Gestão de Pacientes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy:      #1B3566;
+      --navy2:     #152d58;
+      --navy3:     #0f2244;
+      --sidebar:   #111f3d;
+      --mint:      #4ECBA3;
+      --mint-dim:  rgba(78,203,163,.12);
+      --mint-glow: rgba(78,203,163,.22);
+      --surface:   #1e3460;
+      --surface2:  #243d75;
+      --border:    rgba(255,255,255,.08);
+      --w90:       rgba(255,255,255,.90);
+      --w60:       rgba(255,255,255,.60);
+      --w30:       rgba(255,255,255,.30);
+      --w10:       rgba(255,255,255,.07);
+      --red:       #f87171;
+      --yellow:    #fbbf24;
+      --green:     #4ECBA3;
+    }
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html, body { height:100%; }
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--navy2);
+      color: var(--w90);
+      display: flex;
+      -webkit-font-smoothing: antialiased;
+      font-size: 14px;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: 220px;
+      flex-shrink: 0;
+      background: var(--sidebar);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      position: sticky;
+      top: 0;
+    }
+    .sidebar-brand {
+      padding: 1.4rem 1.2rem 1.2rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: .65rem;
+    }
+    .sidebar-brand svg { width:30px; height:30px; flex-shrink:0; }
+    .brand-text { line-height: 1.2; }
+    .brand-name {
+      font-size: .85rem;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .brand-sub {
+      font-size: .65rem;
+      color: var(--mint);
+      font-weight: 400;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .nav { padding: 1rem .75rem; flex: 1; }
+    .nav-label {
+      font-size: .6rem;
+      font-weight: 600;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--w30);
+      padding: .6rem .5rem .4rem;
+    }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: .65rem;
+      padding: .6rem .75rem;
+      border-radius: 8px;
+      cursor: pointer;
+      color: var(--w60);
+      font-size: .85rem;
+      font-weight: 400;
+      transition: all .2s;
+      text-decoration: none;
+      margin-bottom: 2px;
+    }
+    .nav-item svg { width:16px; height:16px; flex-shrink:0; }
+    .nav-item:hover { background: var(--w10); color: var(--w90); }
+    .nav-item.active {
+      background: var(--mint-dim);
+      color: var(--mint);
+      font-weight: 500;
+    }
+    .nav-item .badge {
+      margin-left: auto;
+      background: var(--mint);
+      color: var(--navy3);
+      font-size: .62rem;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 10px;
+    }
+
+    .sidebar-user {
+      padding: 1rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: .65rem;
+    }
+    .avatar-sm {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: var(--mint-dim);
+      border: 1px solid rgba(78,203,163,.3);
+      display: flex; align-items:center; justify-content:center;
+      color: var(--mint);
+      font-weight: 600;
+      font-size: .8rem;
+      flex-shrink: 0;
+    }
+    .user-info { flex: 1; min-width: 0; }
+    .user-name { font-size: .8rem; font-weight: 500; }
+    .user-role { font-size: .68rem; color: var(--w30); }
+
+    /* ── MAIN ── */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: var(--navy2);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .topbar-title { font-size: 1rem; font-weight: 600; flex: 1; }
+    .search-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .search-wrap svg {
+      position: absolute;
+      left: .75rem;
+      width: 15px; height: 15px;
+      color: var(--w30);
+      pointer-events: none;
+    }
+    .search-input {
+      background: var(--w10);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: .5rem .75rem .5rem 2.2rem;
+      color: var(--w90);
+      font-family: 'Outfit', sans-serif;
+      font-size: .82rem;
+      width: 220px;
+      transition: all .2s;
+      outline: none;
+    }
+    .search-input::placeholder { color: var(--w30); }
+    .search-input:focus {
+      border-color: rgba(78,203,163,.4);
+      background: rgba(78,203,163,.05);
+      width: 260px;
+    }
+    .icon-btn {
+      width: 34px; height: 34px;
+      border-radius: 8px;
+      background: var(--w10);
+      border: 1px solid var(--border);
+      display: flex; align-items:center; justify-content:center;
+      cursor: pointer;
+      color: var(--w60);
+      transition: all .2s;
+      position: relative;
+    }
+    .icon-btn:hover { background: var(--mint-dim); color: var(--mint); border-color: rgba(78,203,163,.3); }
+    .icon-btn svg { width:15px; height:15px; }
+    .notif-dot {
+      position: absolute;
+      top: 5px; right: 5px;
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--mint);
+      border: 1.5px solid var(--navy2);
+    }
+    .btn-new {
+      display: flex; align-items:center; gap:.4rem;
+      padding: .5rem 1rem;
+      background: var(--mint);
+      color: var(--navy3);
+      border: none;
+      border-radius: 8px;
+      font-family: 'Outfit', sans-serif;
+      font-size: .8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+    .btn-new:hover { background: #fff; box-shadow: 0 4px 20px var(--mint-glow); }
+    .btn-new svg { width:14px; height:14px; }
+
+    /* ── CONTENT ── */
+    .content { padding: 1.5rem; flex: 1; }
+
+    /* ── STATS ── */
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.1rem 1.2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .stat-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0; height: 2px;
+    }
+    .stat-card.c-mint::after  { background: var(--mint); }
+    .stat-card.c-yellow::after { background: var(--yellow); }
+    .stat-card.c-red::after   { background: var(--red); }
+    .stat-card.c-blue::after  { background: #60a5fa; }
+    .stat-icon {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      display: flex; align-items:center; justify-content:center;
+      margin-bottom: .8rem;
+    }
+    .stat-icon svg { width:16px; height:16px; }
+    .c-mint  .stat-icon { background: rgba(78,203,163,.15);  color: var(--mint); }
+    .c-yellow .stat-icon { background: rgba(251,191,36,.15); color: var(--yellow); }
+    .c-red   .stat-icon { background: rgba(248,113,113,.15); color: var(--red); }
+    .c-blue  .stat-icon { background: rgba(96,165,250,.15);  color: #60a5fa; }
+    .stat-value { font-size: 1.8rem; font-weight: 600; line-height: 1; margin-bottom: .25rem; }
+    .stat-label { font-size: .72rem; color: var(--w60); font-weight: 400; }
+    .stat-delta {
+      position: absolute; top: 1rem; right: 1rem;
+      font-size: .68rem; font-weight: 500;
+      color: var(--mint);
+    }
+
+    /* ── TABLE PANEL ── */
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .panel-head {
+      padding: 1rem 1.2rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+    }
+    .panel-title { font-size: .9rem; font-weight: 600; flex: 1; }
+    .filter-tabs { display: flex; gap: .25rem; }
+    .tab {
+      padding: .35rem .8rem;
+      border-radius: 6px;
+      font-size: .75rem;
+      font-weight: 500;
+      cursor: pointer;
+      color: var(--w60);
+      background: none;
+      border: none;
+      font-family: 'Outfit', sans-serif;
+      transition: all .2s;
+    }
+    .tab:hover { color: var(--w90); background: var(--w10); }
+    .tab.active { background: var(--mint-dim); color: var(--mint); }
+
+    /* ── TABLE ── */
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; }
+    thead tr { border-bottom: 1px solid var(--border); }
+    th {
+      padding: .7rem 1rem;
+      text-align: left;
+      font-size: .68rem;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--w30);
+      white-space: nowrap;
+    }
+    td { padding: .8rem 1rem; vertical-align: middle; }
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background .15s;
+      cursor: pointer;
+    }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--w10); }
+
+    .patient-cell { display: flex; align-items: center; gap: .75rem; }
+    .avatar {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      display: flex; align-items:center; justify-content:center;
+      font-size: .8rem; font-weight: 600;
+      flex-shrink: 0;
+    }
+    .patient-name { font-size: .85rem; font-weight: 500; }
+    .patient-phone { font-size: .72rem; color: var(--w60); margin-top: 1px; }
+
+    .badge-status {
+      display: inline-flex;
+      align-items: center;
+      gap: .3rem;
+      padding: .25rem .65rem;
+      border-radius: 20px;
+      font-size: .72rem;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    .badge-status::before {
+      content: '';
+      width: 5px; height: 5px;
+      border-radius: 50%;
+    }
+    .s-ativo       { background: rgba(78,203,163,.15);  color: var(--mint);   }
+    .s-ativo::before { background: var(--mint); }
+    .s-tratamento  { background: rgba(96,165,250,.15);  color: #60a5fa; }
+    .s-tratamento::before { background: #60a5fa; }
+    .s-retorno     { background: rgba(251,191,36,.15);  color: var(--yellow); }
+    .s-retorno::before { background: var(--yellow); }
+    .s-inativo     { background: rgba(255,255,255,.06); color: var(--w30); }
+    .s-inativo::before { background: var(--w30); }
+
+    .cell-sm { font-size: .82rem; color: var(--w90); }
+    .cell-muted { font-size: .75rem; color: var(--w60); }
+    .overdue { color: var(--red) !important; }
+
+    .action-row { display: flex; gap: .4rem; }
+    .act-btn {
+      width: 28px; height: 28px;
+      border-radius: 6px;
+      background: var(--w10);
+      border: 1px solid var(--border);
+      display: flex; align-items:center; justify-content:center;
+      cursor: pointer;
+      color: var(--w60);
+      transition: all .2s;
+    }
+    .act-btn:hover { background: var(--mint-dim); color: var(--mint); border-color: rgba(78,203,163,.3); }
+    .act-btn svg { width:13px; height:13px; }
+    .act-btn.wpp:hover { background: rgba(37,211,102,.15); color: #25d366; border-color: rgba(37,211,102,.3); }
+
+    /* ── EMPTY / PAGINATION ── */
+    .panel-foot {
+      padding: .8rem 1.2rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: .75rem;
+      color: var(--w60);
+    }
+    .pagination { display: flex; gap: .3rem; }
+    .page-btn {
+      width: 28px; height: 28px;
+      border-radius: 6px;
+      background: var(--w10);
+      border: 1px solid var(--border);
+      display: flex; align-items:center; justify-content:center;
+      cursor: pointer;
+      font-size: .75rem;
+      color: var(--w60);
+      font-family: 'Outfit', sans-serif;
+      transition: all .2s;
+    }
+    .page-btn:hover, .page-btn.active { background: var(--mint-dim); color: var(--mint); border-color: rgba(78,203,163,.3); }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(10,20,45,.7);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      width: 480px;
+      max-width: 95vw;
+      padding: 1.75rem;
+      animation: modal-in .2s ease;
+    }
+    @keyframes modal-in {
+      from { opacity:0; transform:scale(.96) translateY(10px); }
+      to   { opacity:1; transform:scale(1)   translateY(0);    }
+    }
+    .modal-head {
+      display: flex; align-items:center; justify-content:space-between;
+      margin-bottom: 1.5rem;
+    }
+    .modal-title { font-size: 1rem; font-weight: 600; }
+    .modal-close {
+      width: 28px; height: 28px;
+      border-radius: 6px; background: var(--w10);
+      border: none; cursor: pointer;
+      display: flex; align-items:center; justify-content:center;
+      color: var(--w60);
+      transition: all .2s;
+    }
+    .modal-close:hover { background: var(--mint-dim); color: var(--mint); }
+    .modal-close svg { width:14px; height:14px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .85rem; }
+    .form-group { display: flex; flex-direction:column; gap:.35rem; }
+    .form-group.full { grid-column: 1/-1; }
+    label { font-size: .72rem; font-weight: 500; color: var(--w60); letter-spacing:.04em; }
+    input, select {
+      background: var(--w10);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: .55rem .8rem;
+      color: var(--w90);
+      font-family: 'Outfit', sans-serif;
+      font-size: .82rem;
+      outline: none;
+      transition: all .2s;
+    }
+    input:focus, select:focus {
+      border-color: rgba(78,203,163,.4);
+      background: rgba(78,203,163,.05);
+    }
+    select option { background: #1e3460; }
+    .modal-foot {
+      display: flex; justify-content:flex-end; gap:.65rem;
+      margin-top: 1.5rem;
+    }
+    .btn-cancel {
+      padding: .55rem 1.1rem;
+      background: var(--w10);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--w60);
+      font-family: 'Outfit', sans-serif;
+      font-size: .82rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .btn-cancel:hover { color: var(--w90); }
+    .btn-save {
+      padding: .55rem 1.4rem;
+      background: var(--mint);
+      border: none;
+      border-radius: 8px;
+      color: var(--navy3);
+      font-family: 'Outfit', sans-serif;
+      font-size: .82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .btn-save:hover { background: #fff; }
+
+    /* hidden rows for filter */
+    tr.hidden { display: none; }
+  </style>
+</head>
+<body>
+
+<!-- ── SIDEBAR ── -->
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <svg viewBox="0 0 60 60" fill="none">
+      <circle cx="30" cy="30" r="26" stroke="#4ECBA3" stroke-width="1.4"/>
+      <line x1="30" y1="48" x2="30" y2="24" stroke="#4ECBA3" stroke-width="1.4" stroke-linecap="round"/>
+      <path d="M30 43 C23 40 17 33 16 25 C23 27 29 34 30 43Z" stroke="#4ECBA3" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M30 43 C37 40 43 33 44 25 C37 27 31 34 30 43Z" stroke="#4ECBA3" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M30 33 C23 27 21 19 23 13 C28 17 31 25 30 33Z" stroke="#4ECBA3" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M30 33 C37 27 39 19 37 13 C32 17 29 25 30 33Z" stroke="#4ECBA3" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <div class="brand-text">
+      <div class="brand-name">Espaço Vitta</div>
+      <div class="brand-sub">Painel</div>
+    </div>
+  </div>
+
+  <nav class="nav">
+    <div class="nav-label">Menu</div>
+    <a class="nav-item active" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+      Pacientes
+      <span class="badge">48</span>
+    </a>
+    <a class="nav-item" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Agendamentos
+      <span class="badge">6</span>
+    </a>
+    <a class="nav-item" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3C9 3 6 5.5 6 9.5c0 2 .8 4 2 5.5L9 20h6l1-5c1.2-1.5 2-3.5 2-5.5C18 5.5 15 3 12 3z"/></svg>
+      Tratamentos
+    </a>
+    <a class="nav-item" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+      Financeiro
+    </a>
+    <div class="nav-label" style="margin-top:.75rem">Sistema</div>
+    <a class="nav-item" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M19.07 19.07l-1.41-1.41M4.93 19.07l1.41-1.41M12 2v2M12 20v2M2 12h2M20 12h2"/></svg>
+      Configurações
+    </a>
+  </nav>
+
+  <div class="sidebar-user">
+    <div class="avatar-sm">PH</div>
+    <div class="user-info">
+      <div class="user-name">Dr. Pedro Henrick</div>
+      <div class="user-role">CRO-MG 49471</div>
+    </div>
+  </div>
+</aside>
+
+<!-- ── MAIN ── -->
+<div class="main">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <span class="topbar-title">Pacientes</span>
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="searchInput" class="search-input" type="text" placeholder="Buscar paciente…" oninput="filterTable()">
+    </div>
+    <div class="icon-btn" title="Notificações">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+      <span class="notif-dot"></span>
+    </div>
+    <button class="btn-new" onclick="openModal()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Novo Paciente
+    </button>
+  </header>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- STATS -->
+    <div class="stats">
+      <div class="stat-card c-mint">
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
+        <div class="stat-value">48</div>
+        <div class="stat-label">Total de Pacientes</div>
+        <div class="stat-delta">+3 este mês</div>
+      </div>
+      <div class="stat-card c-blue">
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <div class="stat-value">6</div>
+        <div class="stat-label">Consultas Hoje</div>
+        <div class="stat-delta" style="color:#60a5fa">próxima 14h</div>
+      </div>
+      <div class="stat-card c-yellow">
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div class="stat-value">11</div>
+        <div class="stat-label">Retornos Pendentes</div>
+        <div class="stat-delta" style="color:var(--yellow)">lembrar hoje</div>
+      </div>
+      <div class="stat-card c-red">
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <div class="stat-value">4</div>
+        <div class="stat-label">Sem Retorno &gt; 6 meses</div>
+        <div class="stat-delta" style="color:var(--red)">reativar</div>
+      </div>
+    </div>
+
+    <!-- TABLE PANEL -->
+    <div class="panel">
+      <div class="panel-head">
+        <span class="panel-title">Todos os Pacientes</span>
+        <div class="filter-tabs">
+          <button class="tab active" onclick="filterStatus('todos', this)">Todos</button>
+          <button class="tab" onclick="filterStatus('ativo', this)">Ativos</button>
+          <button class="tab" onclick="filterStatus('tratamento', this)">Em Tratamento</button>
+          <button class="tab" onclick="filterStatus('retorno', this)">Retorno</button>
+          <button class="tab" onclick="filterStatus('inativo', this)">Inativos</button>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table id="patientsTable">
+          <thead>
+            <tr>
+              <th>Paciente</th>
+              <th>Tratamento</th>
+              <th>Última Consulta</th>
+              <th>Próximo Retorno</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <tr data-status="tratamento">
+              <td>
+                <div class="patient-cell">
+                  <div class="avatar" style="background:rgba(96,165,250,.15);color:#60a5fa">AM</div>
+                  <div><div class="patient-name">Ana Maria Souza</div><div class="patient-phone">(31) 99123-4567</div></div>
+                </div>
+              </td>
+              <td><span class="cell-sm">Ortodontia</span></td>
+              <td><span class="cell-sm">08/05/2026</span></td>
+              <td><span class="cell-sm">05/06/2026</span></td>
+              <td><span class="badge-status s-tratamento">Em Tratamento</span></td>
+              <td>
+                <div class="action-row">
+                  <button class="act-btn wpp" title="Enviar WhatsApp" onclick="sendWpp('Ana Maria Souza')">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                  </button>
+                  <button class="act-btn" title="Ver histórico">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  </button>
+                  <button class="act-btn" title="Agendar consulta">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+            <tr data-status="retorno">
+              <td>
+                <div class="patient-cell">
+                  <div class="avatar" style="background:rgba(251,191,36,.15);color:var(--yellow)">CP</div>
+                  <div><div class="patient-name">Carlos Pereira</div><div class="patient-phone">(31) 98765-1234</div></div>
+                </div>
+              </td>
+              <td><span class="cell-sm">Implante</span></td>
+              <td><span class="cell-sm">12/01/2026</span></td>
+              <td><span class="cell-sm overdue">Atrasado 4 meses</span></td>
+              <td><span class="badge-status s-retorno">Aguarda Retorno</span></td>
+              <td>
+                <div class="action-row">
+                  <button class="act-btn wpp" title="Lembrar retorno" onclick="sendWpp('Carlos Pereira')">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                  </button>
+                  <button class="act-btn" title="Ver histórico">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  </button>
+                  <button class="act-btn" title="Agendar consulta">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+            <tr data-status="ativo">
+              <td>
+                <div class="patient-cell">
+                  <div class="avatar" style="background:rgba(78,203,163,.15);color:var(--mint)">FL</div>
+                  <div><div class="patient-name">Fernanda Lima</div><div class="patient-phone">(31) 97654-3210</div></div>
+                </div>
+              </td>
+              <td><span class="cell-sm">Limpeza</span></td>
+              <td><span class="cell-sm">03/05/2026</span></td>
+              <td><span class="cell-sm">03/11/2026</span></td>
+              <td><span class="badge-status s-ativo">Ativo</span></td>
+              <td>
+                <div class="action-row">
+                  <button class="act-btn wpp" title="Enviar WhatsApp" onclick="sendWpp('Fernanda Lima')">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                  </button>
+                  <button class="act-btn" title="Ver histórico">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  </button>
+                  <button class="act-btn" title="Agendar consulta">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+            <tr data-status="inativo">
+              <td>
+                <div class="patient-cell">
+                  <div class="avatar" style="background:rgba(255,255,255,.07);color:var(--w60)">RO</div>
+                  <div><div class="patient-name">Ricardo Oliveira</div><div class="patient-phone">(31) 96543-2109</div></div>
+                </div>
+              </td>
+              <td><span class="cell-sm">Clareamento</span></td>
+              <td><span class="cell-sm overdue">10/10/2025</span></td>
+              <td><span class="cell-sm overdue">Sem retorno há 7 meses</span></td>
+              <td><span class="badge-status s-inativo">Inativo</span></td>
+              <td>
+                <div class="action-row">
+                  <button class="act-btn wpp" title="Reativar via WhatsApp" onclick="sendWpp('Ricardo Oliveira')">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                  </button>
+                  <button class="act-btn" title="Ver histórico">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  </button>
+                  <button class="act-btn" title="Agendar consulta">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+            <tr data-status="tratamento">
+              <td>
+                <div class="patient-cell">
+                  <div class="avatar" style="background:rgba(96,165,250,.15);color:#60a5fa">MC</div>
+                  <div><div class="patient-name">Mariana Costa</div><div class="patient-phone">(31) 95432-1098</div></div>
+                </div>
+              </td>
+              <td><span class="cell-sm">Reabilitação Oral</span></td>
+              <td><span class="cell-sm">10/05/2026</span></td>
+              <td><span class="cell-sm">24/05/2026</span></td>
+              <td><span class="badge-status s-tratamento">Em Tratamento</span></td>
+              <td>
+                <div class="action-row">
+                  <button class="act-btn wpp" title="Enviar WhatsApp" onclick="sendWpp('Mariana Costa')">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                  </button>
+                  <button class="act-btn" title="Ver histórico">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  </button>
+                  <button class="act-btn" title="Agendar consulta">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+            <tr data-status="retorno">
+              <td>
+                <div class="patient-cell">
+                  <div class="avatar" style="background:rgba(251,191,36,.15);color:var(--yellow)">JS</div>
+                  <div><div class="patient-name">João Silva</div><div class="patient-phone">(31) 94321-0987</div></div>
+                </div>
+              </td>
+              <td><span class="cell-sm">Cirurgia Oral</span></td>
+              <td><span class="cell-sm">20/02/2026</span></td>
+              <td><span class="cell-sm overdue">Atrasado 3 meses</span></td>
+              <td><span class="badge-status s-retorno">Aguarda Retorno</span></td>
+              <td>
+                <div class="action-row">
+                  <button class="act-btn wpp" title="Lembrar retorno" onclick="sendWpp('João Silva')">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                  </button>
+                  <button class="act-btn" title="Ver histórico">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  </button>
+                  <button class="act-btn" title="Agendar consulta">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+            <tr data-status="ativo">
+              <td>
+                <div class="patient-cell">
+                  <div class="avatar" style="background:rgba(78,203,163,.15);color:var(--mint)">PA</div>
+                  <div><div class="patient-name">Patricia Alves</div><div class="patient-phone">(31) 93210-9876</div></div>
+                </div>
+              </td>
+              <td><span class="cell-sm">Estética Dental</span></td>
+              <td><span class="cell-sm">01/05/2026</span></td>
+              <td><span class="cell-sm">01/11/2026</span></td>
+              <td><span class="badge-status s-ativo">Ativo</span></td>
+              <td>
+                <div class="action-row">
+                  <button class="act-btn wpp" title="Enviar WhatsApp" onclick="sendWpp('Patricia Alves')">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                  </button>
+                  <button class="act-btn" title="Ver histórico">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  </button>
+                  <button class="act-btn" title="Agendar consulta">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel-foot">
+        <span>Mostrando 7 de 48 pacientes</span>
+        <div class="pagination">
+          <button class="page-btn active">1</button>
+          <button class="page-btn">2</button>
+          <button class="page-btn">3</button>
+          <button class="page-btn">›</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<!-- ── MODAL NOVO PACIENTE ── -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-head">
+      <span class="modal-title">Novo Paciente</span>
+      <button class="modal-close" onclick="closeModalBtn()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="form-grid">
+      <div class="form-group full">
+        <label>Nome completo</label>
+        <input type="text" placeholder="Ex: Maria da Silva">
+      </div>
+      <div class="form-group">
+        <label>Telefone / WhatsApp</label>
+        <input type="tel" placeholder="(31) 99999-0000">
+      </div>
+      <div class="form-group">
+        <label>Data de nascimento</label>
+        <input type="date">
+      </div>
+      <div class="form-group">
+        <label>Tratamento</label>
+        <select>
+          <option value="">Selecione…</option>
+          <option>Limpeza e Prevenção</option>
+          <option>Ortodontia</option>
+          <option>Implante</option>
+          <option>Estética Dental</option>
+          <option>Reabilitação Oral</option>
+          <option>Cirurgia Oral</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Status</label>
+        <select>
+          <option>Ativo</option>
+          <option>Em Tratamento</option>
+          <option>Aguarda Retorno</option>
+          <option>Inativo</option>
+        </select>
+      </div>
+      <div class="form-group full">
+        <label>Observações</label>
+        <input type="text" placeholder="Alergia, histórico relevante…">
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-cancel" onclick="closeModalBtn()">Cancelar</button>
+      <button class="btn-save">Salvar Paciente</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function openModal() {
+    document.getElementById('modalOverlay').classList.add('open');
+  }
+  function closeModalBtn() {
+    document.getElementById('modalOverlay').classList.remove('open');
+  }
+  function closeModal(e) {
+    if (e.target === document.getElementById('modalOverlay')) closeModalBtn();
+  }
+
+  function filterStatus(status, btn) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('#patientsTable tbody tr').forEach(row => {
+      if (status === 'todos' || row.dataset.status === status) {
+        row.classList.remove('hidden');
+      } else {
+        row.classList.add('hidden');
+      }
+    });
+  }
+
+  function filterTable() {
+    const q = document.getElementById('searchInput').value.toLowerCase();
+    document.querySelectorAll('#patientsTable tbody tr').forEach(row => {
+      const name = row.querySelector('.patient-name').textContent.toLowerCase();
+      row.classList.toggle('hidden', q !== '' && !name.includes(q));
+    });
+  }
+
+  function sendWpp(name) {
+    const msg = encodeURIComponent(`Olá ${name}! Aqui é o Espaço Vitta. Gostaríamos de agendar seu retorno. Quando seria melhor para você?`);
+    window.open(`https://wa.me/5531998110495?text=${msg}`, '_blank');
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,10 @@
+# Configurações locais (não compartilhar entre máquinas)
+.claude/settings.local.json
+
+# Outputs gerados
+saidas/
+marketing/conteudo/
+
+# Sistema
+.DS_Store
+Thumbs.db
