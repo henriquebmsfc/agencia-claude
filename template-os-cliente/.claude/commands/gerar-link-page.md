@@ -4,7 +4,7 @@ Crie ou atualize o arquivo `link-page/index.html` com uma link page para a bio d
 
 ## Antes de começar
 
-Leia os arquivos `_memoria/empresa.md` e `identidade/design-guide.md` antes de começar.
+Leia os arquivos `_memoria/empresa.md`, `_memoria/preferencias.md` e `identidade/design-guide.md` antes de começar.
 
 ## Estrutura da link page
 

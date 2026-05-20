@@ -29,3 +29,5 @@ Gere 2 versões:
 [resposta com mais contexto ou persuasão]
 
 Indique qual versão você recomenda e por quê.
+
+Salve a resposta escolhida em `outputs/relatorios/resposta-[data].md` se o dono quiser guardar para referência futura.

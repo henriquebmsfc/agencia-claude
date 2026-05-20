@@ -4,7 +4,7 @@ Gere uma pauta de conteúdo para o mês.
 
 ## Antes de começar
 
-Leia `_memoria/empresa.md`, `_memoria/preferencias.md` e `_memoria/estrategia.md` antes de começar.
+Leia `_memoria/empresa.md`, `_memoria/preferencias.md`, `_memoria/estrategia.md` e `_memoria/diagnostico.md` antes de começar. Os gargalos do diagnóstico devem orientar os temas — se o problema do negócio é conversão, o conteúdo do mês deve trabalhar objeções e prova social.
 
 ## Perguntas
 

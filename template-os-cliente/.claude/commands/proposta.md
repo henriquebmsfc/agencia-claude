@@ -4,7 +4,7 @@ Gere uma proposta comercial personalizada.
 
 ## Antes de começar
 
-Leia `_memoria/empresa.md` e `_memoria/preferencias.md` antes de começar.
+Leia `_memoria/empresa.md`, `_memoria/preferencias.md` e `_memoria/diagnostico.md` antes de começar. Se houver diagnóstico do cliente, use os gargalos identificados para personalizar a seção "Entendemos que você precisa de" — proposta que espelha a dor real converte mais.
 
 ## Perguntas
 

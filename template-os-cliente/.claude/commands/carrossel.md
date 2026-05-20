@@ -15,7 +15,16 @@ Faça uma pergunta por vez:
 
 ## Formato de saída
 
-Gere o roteiro do carrossel no seguinte formato:
+**Capa (slide 1) — o gancho é tudo.** Use uma dessas estruturas:
+- Promessa direta: "Como [resultado desejado] sem [objeção principal]"
+- Curiosidade: "O que ninguém te conta sobre [assunto]"
+- Dor: "[Problema que o cliente sente toda semana]? Tem solução."
+- Número: "[X] erros que [perfil do cliente] comete em [contexto]"
+- Contra-intuitivo: "Para de [coisa óbvia]. Faz isso."
+
+Máximo 8 palavras na headline. Subheadline opcional para completar o contexto.
+
+Gere o roteiro no seguinte formato:
 
 ---
 **Capa (slide 1)**

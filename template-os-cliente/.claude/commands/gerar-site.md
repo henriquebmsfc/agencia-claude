@@ -4,7 +4,7 @@ Crie ou atualize o arquivo `site/index.html` com um site de conversão para o ne
 
 ## Antes de começar
 
-Leia os arquivos `_memoria/empresa.md` e `identidade/design-guide.md` antes de começar.
+Leia os arquivos `_memoria/empresa.md`, `_memoria/preferencias.md` e `identidade/design-guide.md` antes de começar.
 
 ## Estrutura do site
 
@@ -19,12 +19,15 @@ O site deve ter as seguintes seções na ordem:
 
 ## Requisitos técnicos
 
-- HTML e CSS inline ou em `<style>` — sem dependências externas, funciona offline
-- Mobile-first — layout responsivo simples
-- Botão WhatsApp abre `https://wa.me/[número]` com mensagem pré-preenchida
+- HTML com `<style>` no `<head>` — sem dependências externas, funciona offline
+- Mobile-first — layout responsivo com `max-width: 680px` centrado
+- Importar fonte do Google Fonts no `<head>` (escolher conforme design-guide ou usar Inter como padrão)
+- Usar variáveis CSS (`--cor-primaria`, `--cor-fundo`, `--cor-texto`) definidas no `:root`
+- Botão WhatsApp abre `https://wa.me/[número]?text=Olá, vim pelo site` com ícone SVG do WhatsApp
 - Cores e fontes do `identidade/design-guide.md`
-- Tom dos textos igual ao `_memoria/preferencias.md`
-- Produtos e preços reais do `_memoria/empresa.md`
+- Tom dos textos igual ao `_memoria/preferencias.md` — não usar linguagem genérica de agência
+- Produtos e preços reais do `_memoria/empresa.md` — nenhum placeholder de conteúdo
+- Visual limpo e profissional: espaçamento generoso, hierarquia tipográfica clara, sem poluição visual
 
 ## Ao finalizar
 

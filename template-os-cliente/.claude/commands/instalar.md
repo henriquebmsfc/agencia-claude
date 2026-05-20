@@ -80,7 +80,16 @@ Faça as perguntas abaixo uma de cada vez. Espere a resposta antes de passar par
 
 ---
 
-### Pergunta 9: Gargalos
+### Pergunta 9: Métricas do negócio
+
+**Prompt ao usuário:**
+"Me dá uma estimativa rápida: qual é o faturamento mensal hoje (pode ser uma faixa), quantos clientes novos entram por mês e qual é o ticket médio?"
+
+**Salvar em:** `_memoria/diagnostico.md` — seção "Métricas-chave"
+
+---
+
+### Pergunta 10: Gargalos
 
 **Prompt ao usuário:**
 "Qual é a maior dor operacional do seu negócio hoje — o que te consome mais tempo ou onde você sente que está perdendo dinheiro?"
