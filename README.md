@@ -40,3 +40,21 @@ git clone https://github.com/henriquebmsfc/agencia-claude.git
 cd agencia-claude
 claude
 ```
+
+## Instalando o OS do Negócio para um cliente
+
+Para cada novo cliente, baixe apenas a pasta `template-os-cliente` e renomeie para o nome do negócio:
+
+```bash
+# Substitua "nome-do-cliente" pelo nome real (ex: espaco-vitta, jotta-turism)
+git clone --no-local --depth 1 --filter=blob:none --sparse \
+  https://github.com/henriquebmsfc/agencia-claude.git nome-do-cliente
+cd nome-do-cliente
+git sparse-checkout set template-os-cliente
+mv template-os-cliente/* .
+mv template-os-cliente/.claude .
+rm -rf template-os-cliente .git
+```
+
+Depois abra a pasta no Claude Code e rode `/instalar`.
+
