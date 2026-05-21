@@ -26,7 +26,9 @@ Sistema operacional do negócio construído no Claude Code. Contém toda a intel
 | `/gerar-site` | Cria ou atualiza o site |
 | `/gerar-link-page` | Cria ou atualiza a link page do Instagram |
 | `/carrossel` | Gera roteiro de carrossel |
-| `/legenda` | Gera legenda para post |
+| `/post` | Gera texto visual + legenda para post único |
+| `/story` | Gera roteiro de story único ou sequência |
+| `/legenda` | Gera legenda para qualquer post |
 | `/pauta-conteudo` | Gera pauta mensal de conteúdo |
 | `/proposta` | Gera proposta comercial |
 | `/resposta-cliente` | Gera resposta para mensagem de cliente |

@@ -8,6 +8,7 @@ Execute os seguintes passos em ordem:
 
 1. **Verificar status:** 
    - Rode `git status` para ver o que mudou
+   - Se não houver nada para commitar, informar: "Nada para salvar — tudo já está atualizado no GitHub." e encerrar
 
 2. **Apresentar resumo:** 
    - Mostre ao dono um resumo das alterações em linguagem simples

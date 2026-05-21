@@ -20,7 +20,7 @@ Gere uma pauta mensal no formato:
 Frequência: [X posts/semana]
 
 **Semana 1**
-- Post 1: [tema] | Formato: [carrossel/foto/reels] | Objetivo: [awareness/conversão/relacionamento]
+- Post 1: [tema] | Formato: [carrossel / post único / story / sequência de stories / reels] | Objetivo: [awareness/conversão/relacionamento]
 - Post 2: [tema] | Formato: [...] | Objetivo: [...]
 
 **Semana 2**

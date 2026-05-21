@@ -4,23 +4,25 @@ Leia os arquivos `_memoria/empresa.md`, `_memoria/preferencias.md` e `_memoria/e
 
 ## Instruções
 
-1. Tente ler os três arquivos de memória
-2. Extraia as seguintes informações:
+1. Leia os quatro arquivos de memória: `_memoria/empresa.md`, `_memoria/preferencias.md`, `_memoria/estrategia.md` e `_memoria/diagnostico.md`
+2. Extraia:
    - Nome da empresa (de `empresa.md`)
-   - Foco do momento (de `estrategia.md`, seção "Foco do momento")
-   - Meta do mês (de `estrategia.md`, seção "Meta do mês")
-   - Tom de voz (de `preferencias.md`, seção "Tom de voz")
+   - Foco do momento (de `estrategia.md`)
+   - Meta do mês (de `estrategia.md`)
+   - Gargalo principal (de `diagnostico.md`) — só incluir se estiver preenchido
+   - Tom de voz (de `preferencias.md`)
 
-3. Exiba o resumo no formato abaixo (máximo 6 linhas):
+3. Exiba o resumo no formato abaixo:
 
 ```
 **[NOME DA EMPRESA] — sessão iniciada**
 
-📌 Foco atual: [foco do momento]
-🎯 Meta do mês: [meta do mês]
+📌 Foco: [foco do momento]
+🎯 Meta: [meta do mês]
+🔍 Gargalo: [gargalo principal]   ← omitir essa linha se não preenchido
 🗣️ Tom: [tom de voz]
 
 Pronto. O que vamos trabalhar hoje?
 ```
 
-Se algum arquivo não existir ou estiver incompleto, avise ao usuário que precisa executar `/instalar` primeiro.
+Se algum arquivo não existir ou estiver incompleto, avise que precisa executar `/instalar` primeiro.

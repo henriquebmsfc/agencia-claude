@@ -20,10 +20,12 @@ Leia os arquivos `_memoria/empresa.md`, `_memoria/preferencias.md` e `identidade
 
 ## Requisitos técnicos
 
-- HTML e CSS inline — sem dependências externas
-- Design vertical centralizado, otimizado para mobile
+- HTML com `<style>` no `<head>` — sem dependências externas além do Google Fonts
+- Importar fonte do Google Fonts no `<head>` (conforme design-guide ou usar Inter como padrão)
+- Usar variáveis CSS (`--cor-primaria`, `--cor-fundo`, `--cor-texto`) definidas no `:root`
+- Design vertical centralizado, otimizado para mobile (`max-width: 480px`)
 - Cores e tipografia do `identidade/design-guide.md`
-- Cada botão tem cor e estilo consistentes com a identidade
+- Cada botão com cor e estilo consistentes com a identidade
 
 ## Ao finalizar
 

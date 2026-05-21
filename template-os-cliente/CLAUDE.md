@@ -85,8 +85,10 @@ Use `/atualizar` para uma varredura completa quando houver dúvida.
 | `/diagnostico` | Mapeia gargalos operacionais e oportunidades de crescimento |
 | `/gerar-site` | Cria ou atualiza o site de conversão |
 | `/gerar-link-page` | Cria ou atualiza a link page da bio do Instagram |
-| `/carrossel` | Gera carrossel para Instagram com voz e produtos do negócio |
-| `/legenda` | Gera legenda para post |
+| `/carrossel` | Gera roteiro de carrossel para Instagram |
+| `/post` | Gera texto visual + legenda para post único |
+| `/story` | Gera roteiro de story único ou sequência de stories |
+| `/legenda` | Gera legenda para qualquer post |
 | `/pauta-conteudo` | Gera pauta de conteúdo para o mês |
 | `/proposta` | Gera proposta comercial para um cliente específico |
 | `/resposta-cliente` | Gera resposta para mensagem de cliente |
