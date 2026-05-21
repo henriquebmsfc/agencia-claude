@@ -6,15 +6,7 @@ Esse é o primeiro comando a rodar depois de clonar o repositório. Não pode so
 
 ## Pré-checagem
 
-### 1. Nome da pasta
-
-Conferir o nome da pasta atual. Se for `template-os-cliente`, `mazyos`, `os-negocio` ou variação genérica, avisar:
-
-> "A pasta ainda tem nome genérico ('[nome-atual]'). O ideal é ela ter o nome do seu negócio. Quando terminarmos o setup, te lembro de renomear — é rápido. Bora seguir?"
-
-Registrar mentalmente para usar na Fase 5.
-
-### 2. Arquivos de contexto
+### Arquivos de contexto
 
 Verificar se algum arquivo de memória já tem conteúdo real (não só placeholders):
 - `_memoria/empresa.md`
@@ -32,12 +24,18 @@ Se for setup limpo, seguir direto.
 
 ## Fase 1 — Perfil do negócio
 
-Perguntar qual perfil mais combina:
+Perguntar:
+
+> "Antes de começar, me conta um pouco sobre o tamanho do negócio. Qual desses perfis mais se parece com você?"
+
+Apresentar as opções:
 
 1. **Profissional solo / autônomo** — trabalha sozinho, mistura marca pessoal e negócio
 2. **Negócio pequeno** — até 5 pessoas, operação simples, dono faz tudo
 3. **Negócio em crescimento** — time de 5 a 20 pessoas, quer escalar sem perder o controle
 4. **Empresa estruturada** — 20+ pessoas, múltiplas áreas, decisão descentralizada
+
+→ Salvar em `_memoria/empresa.md` — campo "Perfil do negócio"
 
 A resposta calibra o tom das sugestões e o nível de complexidade das skills.
 
@@ -53,11 +51,11 @@ Fazer as perguntas em ordem, esperando a resposta de cada uma antes de seguir. S
 
 → Salvar em `_memoria/empresa.md` — campo "Nome do negócio" e atualizar o `CLAUDE.md`
 
-2. "O que você entrega pro cliente? Me descreve em uma frase o que ele recebe quando te contrata — produto, serviço, resultado."
+2. "O que você entrega pro cliente? Me descreve em uma frase o que ele recebe quando te contrata — e quais são seus produtos ou serviços principais: nome, descrição rápida e preço de cada um."
 
-→ Salvar em `_memoria/empresa.md` — seção "Sobre o negócio"
+→ Salvar em `_memoria/empresa.md` — seções "Sobre o negócio" e "Produtos e serviços"
 
-3. "Quem é seu cliente? Descreve o perfil real — sem persona de marketing, o tipo de pessoa mesmo. O que ela faz, o que a faz te contratar?"
+3. "Quem é seu cliente? Descreve o perfil real — sem persona de marketing, a pessoa mesmo. O que essa pessoa faz, o que a leva a te contratar?"
 
 → Salvar em `_memoria/empresa.md` — seção "Clientes ideais"
 
@@ -81,7 +79,7 @@ Fazer as perguntas em ordem, esperando a resposta de cada uma antes de seguir. S
 
 → Salvar em `_memoria/estrategia.md` — seção "Canal de aquisição atual" e `_memoria/diagnostico.md` — seção "Canal com maior potencial não explorado"
 
-8. "Me dá uma estimativa do negócio hoje: faturamento mensal (pode ser uma faixa), ticket médio e quantos clientes novos entram por mês."
+8. "Me dá uma estimativa do negócio hoje: faturamento mensal (pode ser uma faixa), ticket médio e quantos clientes novos entram por mês. Responde só o que souber — não precisa ter todos os números."
 
 → Salvar em `_memoria/diagnostico.md` — seção "Métricas-chave"
 
@@ -97,7 +95,7 @@ Fazer as perguntas em ordem, esperando a resposta de cada uma antes de seguir. S
 
 **Sobre identidade e presença:**
 
-11. "Tem identidade visual definida? Se sim, quais são as cores principais e a fonte. Se tem logo, coloca o arquivo em `identidade/logo.png` e me confirma."
+11. "Tem identidade visual definida? Se sim, quais são as cores principais e a fonte. Se tiver logo, pode enviar o arquivo aqui no chat — depois é só salvar como `identidade/logo.png` na pasta do negócio."
 
 → Salvar em `identidade/design-guide.md` — seções "Cores", "Tipografia" e "Logo"
 
@@ -109,37 +107,14 @@ Fazer as perguntas em ordem, esperando a resposta de cada uma antes de seguir. S
 
 ## Fase 3 — Preenchimento dos arquivos
 
-### `_memoria/empresa.md`
-Preencher com base nas perguntas 1-4. Estrutura: nome do negócio, o que entrega, perfil de cliente real, equipe. Sem placeholder — só o que foi respondido.
+Preencher cada arquivo conforme os mapeamentos indicados em cada pergunta acima. Observações importantes:
 
-### `_memoria/preferencias.md`
-Preencher com base nas perguntas 5-6. Estrutura:
-- **Tom de voz:** derivar do exemplo real da pergunta 5 — descrever em 2-3 frases o jeito de escrever, com referência ao exemplo
-- **O que evitar:** lista direta das respostas 5 e 6
-- **Assinatura:** se aparecer no exemplo da pergunta 5, capturar
-
-### `_memoria/estrategia.md`
-Preencher com base nas perguntas 7 e 9. Estrutura:
-- **Canal de aquisição atual:** resposta da 7
-- **Foco do momento:** derivar do gargalo da pergunta 9
-- **Meta do mês:** deixar em branco por ora — preencher com `/atualizar` quando o dono definir
-
-### `_memoria/diagnostico.md`
-Preencher com base nas perguntas 8 e 9. Estrutura:
-- **Métricas-chave:** faturamento estimado, ticket médio, clientes/mês da pergunta 8
-- **Gargalo principal:** resposta da pergunta 9
-- **Tarefa repetitiva para automatizar:** resposta da pergunta 10 — candidata a skill via `/mapear-rotinas`
-- **Canal com maior potencial não explorado:** resposta da pergunta 7
-
-### `identidade/design-guide.md`
-Se o dono forneceu cores, fonte ou logo (pergunta 11), preencher os campos correspondentes. Se não:
-> "Deixei o `identidade/design-guide.md` em branco. Quando você definir a identidade visual, edita lá — as skills de site, link page e carrossel leem esse arquivo antes de criar qualquer visual."
-
-### `_memoria/empresa.md` — contato
-Adicionar os dados da pergunta 12 na seção "Localização e contato".
-
-### `CLAUDE.md`
-Substituir `[NOME DA EMPRESA]` pelo nome real respondido na pergunta 1.
+- **Tom de voz em `preferencias.md`:** não copiar o exemplo da P5 literalmente — descrever em 2-3 frases o jeito de escrever que ele revela (ritmo, vocabulário, grau de formalidade)
+- **Assinatura:** se aparecer no exemplo da P5, capturar em `preferencias.md`
+- **Meta do mês em `estrategia.md`:** deixar em branco — preencher com `/atualizar` quando o dono definir
+- **Identidade visual:** se o dono não forneceu cores/fonte na P11, avisar: "Deixei o `identidade/design-guide.md` em branco. Quando definir a identidade visual, edita lá — site, link page e carrossel leem esse arquivo antes de criar qualquer coisa."
+- **CLAUDE.md:** substituir `[NOME DA EMPRESA]` pelo nome real da P1
+- Sem placeholders nos arquivos finais — registrar só o que foi respondido
 
 ---
 
@@ -159,30 +134,7 @@ Mostrar o que foi configurado:
 
 ---
 
-## Fase 5 — Renomear pasta (se necessário)
-
-Se a pasta ainda tem nome genérico, gerar slug do nome do negócio (resposta da pergunta 1):
-- minúsculas, sem acentos, espaços viram hífen, caracteres especiais removidos
-
-Ex: "Espaço Vitta" → `espaco-vitta`
-
-Mostrar:
-
-> "Última coisa: a pasta ainda está com nome genérico ('[nome-atual]').
-> Para ter a cara do negócio, recomendo renomear para '[slug]'.
->
-> Como fazer:
-> 1. Fecha o VS Code
-> 2. Renomeia a pasta no Finder (Mac) ou Explorer (Windows)
-> 3. Abre o VS Code de novo na pasta renomeada
->
-> Se preferir outro nome, me fala."
-
-Se a pasta já tem nome próprio, pular essa fase.
-
----
-
-## Fase 6 — Próximos passos
+## Fase 5 — Próximos passos
 
 > "Pronto. O sistema já conhece o seu negócio.
 >
@@ -196,5 +148,5 @@ Se a pasta já tem nome próprio, pular essa fase.
 
 - Não inventar dados — se a resposta for vaga, registrar do jeito que veio
 - Não escrever avisos de placeholder nos arquivos finais — os colchetes saem depois do /instalar
-- Setup máximo de 5-7 minutos. Se o dono enrolar numa pergunta, registra o que tem e segue
+- Setup máximo de 5-10 minutos. Se o dono enrolar numa pergunta, registra o que tem e segue
 - Não fazer perguntas extras além das listadas sem motivo claro

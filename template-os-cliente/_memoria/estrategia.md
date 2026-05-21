@@ -9,6 +9,9 @@
 ## Meta do trimestre
 [Meta maior do período]
 
+## Canal de aquisição atual
+[De onde vêm os clientes hoje — ex: indicação, Instagram, Google, visita no local]
+
 ## O que NÃO fazer agora
 [Distrações e projetos que estão pausados intencionalmente]
 
