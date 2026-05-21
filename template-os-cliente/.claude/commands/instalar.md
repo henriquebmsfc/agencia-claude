@@ -1,106 +1,176 @@
-# /instalar — Onboarding Guiado
+# /instalar — Configuração inicial do sistema
 
-Você vai conduzir o onboarding do negócio. Seu objetivo é coletar todas as informações necessárias para configurar o sistema e no final popular automaticamente os arquivos de memória e identidade.
-
-## Fluxo de Onboarding
-
-Faça as perguntas abaixo uma de cada vez. Espere a resposta antes de passar para a próxima. Use tom conversacional — não pareça um formulário.
+Esse é o primeiro comando a rodar depois de clonar o repositório. Não pode soar burocrático — é uma conversa de descoberta. Faz uma pergunta por vez, espera a resposta, não enfileira tudo. O objetivo é o sistema sair daqui sabendo quem é o negócio, como ele fala, onde está o dinheiro e onde estão os gargalos.
 
 ---
 
-### Pergunta 1: Sobre o negócio
+## Pré-checagem
 
-**Prompt ao usuário:**
-"Vamos começar pelo básico: me conta o que você faz. O que sua empresa entrega, para quem, e o que diferencia você da concorrência?"
+### 1. Nome da pasta
 
-**Salvar em:** `_memoria/empresa.md` — seção "Sobre o negócio" e "Diferenciais"
+Conferir o nome da pasta atual. Se for `template-os-cliente`, `mazyos`, `os-negocio` ou variação genérica, avisar:
 
----
+> "A pasta ainda tem nome genérico ('[nome-atual]'). O ideal é ela ter o nome do seu negócio. Quando terminarmos o setup, te lembro de renomear — é rápido. Bora seguir?"
 
-### Pergunta 2: Produtos e serviços
+Registrar mentalmente para usar na Fase 5.
 
-**Prompt ao usuário:**
-"Quais são seus produtos ou serviços principais? Me dá o nome, uma descrição rápida e o preço de cada um."
+### 2. Arquivos de contexto
 
-**Salvar em:** `_memoria/empresa.md` — seção "Produtos e serviços"
+Verificar se algum arquivo de memória já tem conteúdo real (não só placeholders):
+- `_memoria/empresa.md`
+- `_memoria/preferencias.md`
+- `_memoria/estrategia.md`
+- `_memoria/diagnostico.md`
 
----
+Se algum já tiver conteúdo, perguntar:
 
-### Pergunta 3: Cliente ideal
+> "Já tem contexto preenchido aqui. Quer recomeçar do zero ou complementar o que falta?"
 
-**Prompt ao usuário:**
-"Quem é o cliente que você mais gosta de atender? Descreve o perfil: cargo, tipo de negócio, qual dor principal ele resolve quando te contrata."
-
-**Salvar em:** `_memoria/empresa.md` — seção "Clientes ideais"
-
----
-
-### Pergunta 4: Contato e localização
-
-**Prompt ao usuário:**
-"Qual é o seu WhatsApp de contato, @ do Instagram, cidade e site (se tiver)?"
-
-**Salvar em:** `_memoria/empresa.md` — seção "Localização e contato"
+Se for setup limpo, seguir direto.
 
 ---
 
-### Pergunta 5: Tom de voz
+## Fase 1 — Perfil do negócio
 
-**Prompt ao usuário:**
-"Como você gosta de se comunicar com clientes? Mais formal ou informal? Tem alguma expressão que você usa muito, ou coisa que você odeia quando uma empresa faz na comunicação?"
+Perguntar qual perfil mais combina:
 
-**Salvar em:** `_memoria/preferencias.md` — seções "Tom de voz", "O que sempre fazer" e "O que nunca fazer"
+1. **Profissional solo / autônomo** — trabalha sozinho, mistura marca pessoal e negócio
+2. **Negócio pequeno** — até 5 pessoas, operação simples, dono faz tudo
+3. **Negócio em crescimento** — time de 5 a 20 pessoas, quer escalar sem perder o controle
+4. **Empresa estruturada** — 20+ pessoas, múltiplas áreas, decisão descentralizada
 
----
-
-### Pergunta 6: Exemplos de comunicação
-
-**Prompt ao usuário:**
-"Me manda um exemplo de mensagem que você já enviou para um cliente e ficou satisfeito com o resultado — pode ser WhatsApp, e-mail, legenda de post, qualquer coisa."
-
-**Salvar em:** `_memoria/preferencias.md` — seção "Exemplos de tom certo"
+A resposta calibra o tom das sugestões e o nível de complexidade das skills.
 
 ---
 
-### Pergunta 7: Identidade visual
+## Fase 2 — Entrevista
 
-**Prompt ao usuário:**
-"Quais são as cores principais da sua marca? Tem alguma fonte específica? Me descreve o estilo visual que você usa — minimalista, vibrante, profissional, descontraído..."
+Fazer as perguntas em ordem, esperando a resposta de cada uma antes de seguir. Se a resposta vier vaga, pedir concretude uma vez. Não insistir — registrar o que veio.
 
-**Salvar em:** `identidade/design-guide.md` — seções "Cores" e "Tom visual"
+**Sobre o negócio:**
+
+1. "Como você chama o que você faz? (nome da empresa, ou seu nome se for marca pessoal)"
+
+2. "O que você entrega, em uma frase do jeito que explicaria num papo casual com um cliente em potencial?"
+
+3. "Quem te paga? Descreve o perfil do cliente real — sem persona de marketing, o tipo de pessoa mesmo. O que ela faz, o que a faz te contratar?"
+
+4. "Você toca sozinho ou tem equipe? Se tem, quantos e o que cada um faz no dia a dia?"
+
+**Sobre voz:**
+
+5. "Me cola um exemplo de como você escreve pro cliente — mensagem de WhatsApp, legenda do Instagram, email, o que tiver de recente. Assim eu calibro o jeito de escrever sem precisar adivinhar."
+
+6. "O que te irrita quando uma empresa escreve assim? Pode ser expressão, formato, tom — qualquer coisa que você odeia ver."
+
+**Sobre crescimento:**
+
+7. "Como os seus clientes chegam até você hoje? (indicação, Instagram, Google, tráfego pago, visita física...) E qual canal você sente que poderia trazer mais e ainda não traz?"
+
+8. "Me dá uma estimativa do negócio hoje: faturamento mensal (pode ser uma faixa), ticket médio e quantos clientes novos entram por mês."
+
+9. "O que está segurando o crescimento do negócio? Qual é o gargalo principal — onde você sente que está perdendo dinheiro ou oportunidade?"
+
+**Sobre rotina:**
+
+10. "Se eu pudesse tirar UMA coisa que você repete toda semana das suas costas, o que seria?"
+
+**Sobre identidade e presença:**
+
+11. "Tem identidade visual definida? Se sim, quais são as cores principais e a fonte. Se tem logo, coloca o arquivo em `identidade/logo.png` e me confirma."
+
+12. "Qual é o seu WhatsApp de contato, @ do Instagram, cidade e site (se já tiver)?"
 
 ---
 
-### Pergunta 8: Foco atual
+## Fase 3 — Preenchimento dos arquivos
 
-**Prompt ao usuário:**
-"O que é prioridade para você agora? Qual é a meta do próximo mês?"
+### `_memoria/empresa.md`
+Preencher com base nas perguntas 1-4. Estrutura: nome do negócio, o que entrega, perfil de cliente real, equipe. Sem placeholder — só o que foi respondido.
 
-**Salvar em:** `_memoria/estrategia.md` — seções "Foco do momento" e "Meta do mês"
+### `_memoria/preferencias.md`
+Preencher com base nas perguntas 5-6. Estrutura:
+- **Tom de voz:** derivar do exemplo real da pergunta 5 — descrever em 2-3 frases o jeito de escrever, com referência ao exemplo
+- **O que evitar:** lista direta das respostas 5 e 6
+- **Assinatura:** se aparecer no exemplo da pergunta 5, capturar
+
+### `_memoria/estrategia.md`
+Preencher com base nas perguntas 7 e 9. Estrutura:
+- **Canal de aquisição atual:** resposta da 7
+- **Foco do momento:** derivar do gargalo da pergunta 9
+- **Meta do mês:** deixar em branco por ora — preencher com `/atualizar` quando o dono definir
+
+### `_memoria/diagnostico.md`
+Preencher com base nas perguntas 8 e 9. Estrutura:
+- **Métricas-chave:** faturamento estimado, ticket médio, clientes/mês da pergunta 8
+- **Gargalo principal:** resposta da pergunta 9
+- **Tarefa repetitiva para automatizar:** resposta da pergunta 10 — candidata a skill via `/mapear-rotinas`
+- **Canal com maior potencial não explorado:** resposta da pergunta 7
+
+### `identidade/design-guide.md`
+Se o dono forneceu cores, fonte ou logo (pergunta 11), preencher os campos correspondentes. Se não:
+> "Deixei o `identidade/design-guide.md` em branco. Quando você definir a identidade visual, edita lá — as skills de site, link page e carrossel leem esse arquivo antes de criar qualquer visual."
+
+### `_memoria/empresa.md` — contato
+Adicionar os dados da pergunta 12 na seção "Localização e contato".
+
+### `CLAUDE.md`
+Substituir `[NOME DA EMPRESA]` pelo nome real respondido na pergunta 1.
 
 ---
 
-### Pergunta 9: Métricas do negócio
+## Fase 4 — Resumo
 
-**Prompt ao usuário:**
-"Me dá uma estimativa rápida: qual é o faturamento mensal hoje (pode ser uma faixa), quantos clientes novos entram por mês e qual é o ticket médio?"
+Mostrar o que foi configurado:
 
-**Salvar em:** `_memoria/diagnostico.md` — seção "Métricas-chave"
-
----
-
-### Pergunta 10: Gargalos
-
-**Prompt ao usuário:**
-"Qual é a maior dor operacional do seu negócio hoje — o que te consome mais tempo ou onde você sente que está perdendo dinheiro?"
-
-**Salvar em:** `_memoria/diagnostico.md` — seção "Gargalos identificados"
+```
+✓ Perfil: [perfil]
+✓ Negócio: _memoria/empresa.md
+✓ Tom de voz: _memoria/preferencias.md
+✓ Foco e canal: _memoria/estrategia.md
+✓ Diagnóstico inicial: _memoria/diagnostico.md
+✓ Identidade visual: identidade/design-guide.md  [preenchida | em branco — preencher depois]
+✓ CLAUDE.md atualizado com o nome do negócio
+```
 
 ---
 
-## Após coletar todas as respostas
+## Fase 5 — Renomear pasta (se necessário)
 
-1. Informe: "Vou salvar tudo agora. Um momento."
-2. Popule cada arquivo de memória com as informações coletadas
-3. Atualize o `CLAUDE.md` substituindo [NOME DA EMPRESA] pelo nome real
-4. Informe: "Pronto! O sistema está configurado com as informações do seu negócio. Para começar qualquer sessão futura, use `/abrir`. Para criar conteúdo, use `/carrossel`, `/legenda` ou `/pauta-conteudo`. Para gerar seu site, use `/gerar-site`."
+Se a pasta ainda tem nome genérico, gerar slug do nome do negócio (resposta da pergunta 1):
+- minúsculas, sem acentos, espaços viram hífen, caracteres especiais removidos
+
+Ex: "Espaço Vitta" → `espaco-vitta`
+
+Mostrar:
+
+> "Última coisa: a pasta ainda está com nome genérico ('[nome-atual]').
+> Para ter a cara do negócio, recomendo renomear para '[slug]'.
+>
+> Como fazer:
+> 1. Fecha o VS Code
+> 2. Renomeia a pasta no Finder (Mac) ou Explorer (Windows)
+> 3. Abre o VS Code de novo na pasta renomeada
+>
+> Se preferir outro nome, me fala."
+
+Se a pasta já tem nome próprio, pular essa fase.
+
+---
+
+## Fase 6 — Próximos passos
+
+> "Pronto. O sistema já conhece o seu negócio.
+>
+> No começo de cada sessão, roda `/abrir` — eu carrego tudo que combinamos aqui antes da primeira resposta. Para gerar seu site, roda `/gerar-site`. Para criar conteúdo, use `/carrossel` ou `/legenda`.
+>
+> Você mencionou que repete '[resposta da pergunta 10]' toda semana. Quando quiser tirar isso das costas de vez, roda `/mapear-rotinas` — a gente transforma isso em skill."
+
+---
+
+## Regras
+
+- Não inventar dados — se a resposta for vaga, registrar do jeito que veio
+- Não escrever avisos de placeholder nos arquivos finais — os colchetes saem depois do /instalar
+- Setup máximo de 5-7 minutos. Se o dono enrolar numa pergunta, registra o que tem e segue
+- Não fazer perguntas extras além das listadas sem motivo claro
