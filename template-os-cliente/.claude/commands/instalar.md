@@ -49,37 +49,61 @@ Fazer as perguntas em ordem, esperando a resposta de cada uma antes de seguir. S
 
 **Sobre o negócio:**
 
-1. "Como você chama o que você faz? (nome da empresa, ou seu nome se for marca pessoal)"
+1. "Qual é o nome da sua empresa ou da sua marca pessoal?"
 
-2. "O que você entrega, em uma frase do jeito que explicaria num papo casual com um cliente em potencial?"
+→ Salvar em `_memoria/empresa.md` — campo "Nome do negócio" e atualizar o `CLAUDE.md`
 
-3. "Quem te paga? Descreve o perfil do cliente real — sem persona de marketing, o tipo de pessoa mesmo. O que ela faz, o que a faz te contratar?"
+2. "O que você entrega pro cliente? Me descreve em uma frase o que ele recebe quando te contrata — produto, serviço, resultado."
+
+→ Salvar em `_memoria/empresa.md` — seção "Sobre o negócio"
+
+3. "Quem é seu cliente? Descreve o perfil real — sem persona de marketing, o tipo de pessoa mesmo. O que ela faz, o que a faz te contratar?"
+
+→ Salvar em `_memoria/empresa.md` — seção "Clientes ideais"
 
 4. "Você toca sozinho ou tem equipe? Se tem, quantos e o que cada um faz no dia a dia?"
+
+→ Salvar em `_memoria/empresa.md` — seção "Equipe"
 
 **Sobre voz:**
 
 5. "Me cola um exemplo de como você escreve pro cliente — mensagem de WhatsApp, legenda do Instagram, email, o que tiver de recente. Assim eu calibro o jeito de escrever sem precisar adivinhar."
 
-6. "O que te irrita quando uma empresa escreve assim? Pode ser expressão, formato, tom — qualquer coisa que você odeia ver."
+→ Salvar em `_memoria/preferencias.md` — seção "Exemplos de tom certo" + derivar "Tom de voz" a partir do exemplo
+
+6. "O que você vê na comunicação das empresas que te irrita? Exemplo: gíria, emoji, apelido."
+
+→ Salvar em `_memoria/preferencias.md` — seção "O que nunca fazer"
 
 **Sobre crescimento:**
 
-7. "Como os seus clientes chegam até você hoje? (indicação, Instagram, Google, tráfego pago, visita física...) E qual canal você sente que poderia trazer mais e ainda não traz?"
+7. "De onde vêm seus clientes hoje? (ex: indicação de conhecido, Instagram, Google, evento, visita no local...) E de onde você sente que poderiam vir mais e ainda não vêm?"
+
+→ Salvar em `_memoria/estrategia.md` — seção "Canal de aquisição atual" e `_memoria/diagnostico.md` — seção "Canal com maior potencial não explorado"
 
 8. "Me dá uma estimativa do negócio hoje: faturamento mensal (pode ser uma faixa), ticket médio e quantos clientes novos entram por mês."
 
+→ Salvar em `_memoria/diagnostico.md` — seção "Métricas-chave"
+
 9. "O que está segurando o crescimento do negócio? Qual é o gargalo principal — onde você sente que está perdendo dinheiro ou oportunidade?"
+
+→ Salvar em `_memoria/diagnostico.md` — seção "Gargalo principal" e `_memoria/estrategia.md` — seção "Foco do momento"
 
 **Sobre rotina:**
 
 10. "Se eu pudesse tirar UMA coisa que você repete toda semana das suas costas, o que seria?"
 
+→ Salvar em `_memoria/diagnostico.md` — seção "Tarefa repetitiva para automatizar"
+
 **Sobre identidade e presença:**
 
 11. "Tem identidade visual definida? Se sim, quais são as cores principais e a fonte. Se tem logo, coloca o arquivo em `identidade/logo.png` e me confirma."
 
+→ Salvar em `identidade/design-guide.md` — seções "Cores", "Tipografia" e "Logo"
+
 12. "Qual é o seu WhatsApp de contato, @ do Instagram, cidade e site (se já tiver)?"
+
+→ Salvar em `_memoria/empresa.md` — seção "Localização e contato"
 
 ---
 
