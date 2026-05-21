@@ -38,3 +38,64 @@ O comportamento de **complementar** não está definido. O sistema não sabe:
 **Ponto de atenção futuro:** Se o produto evoluir para um modelo self-service (cliente clona e configura sozinho, sem o consultor), essa fase precisa voltar. Guardar a lógica comentada ou numa branch separada.
 
 ---
+
+## 3. Pasta de imagens no template
+
+Criar pasta `imagens/` no template para o cliente salvar fotos usadas em carrossel, site e link page. As skills visuais devem referenciar essa pasta ao gerar conteúdo.
+
+---
+
+## 4. Vícios de linguagem de IA
+
+Adicionar instrução no CLAUDE.md e/ou `preferencias.md` proibindo vícios comuns: "mergulhar", "navegar", "no mundo de hoje", "é fundamental", "vale ressaltar", "em um mundo cada vez mais", listas excessivas, aberturas com "Claro!".
+
+**Pesquisar:** se existe skill ou plugin que detecta e corrige esse padrão automaticamente antes de entregar qualquer output.
+
+---
+
+## 5. /proposta — gerar PDF formatado
+
+Atualmente gera `.md`. Precisa gerar PDF na identidade visual da empresa (cores, tipografia do design-guide). Avaliar: HTML→PDF via Playwright, ou HTML intermediário que o cliente imprime como PDF.
+
+---
+
+## 6. Skills visuais — integração com frontend-design skill
+
+Verificar se `/gerar-site`, `/gerar-link-page`, `/carrossel`, `/post` e `/story` estão chamando `frontend-design:frontend-design` antes de gerar HTML. Se não, adicionar a chamada.
+
+**Pesquisar também:** skills ou plugins que elevam qualidade visual para designs mais ousados.
+
+---
+
+## 7. /gerar-site — referências visuais e imagens
+
+- Buscar referências de imagens reais (Unsplash, Pexels) — priorizar imagens sobre placeholders genéricos
+- Buscar referências de design no Dribbble antes de gerar (pesquisar como integrar ou simular na skill)
+- Instrução explícita para priorizar seções com foto no layout
+
+---
+
+## 8. /carrossel — formato, geração e entrega em JPG
+
+- Fluxo atual: gera `.md` → gera HTML → precisa entregar JPG. Automatizar HTML→JPG via Playwright
+- Formato fixo: **1350x1080px**
+- Não enumerar slides no output visual ("Slide 1", "Slide 2" etc.)
+- Integrar `frontend-design` skill obrigatoriamente
+- Buscar referência de imagens em banco (Unsplash, Pexels) quando relevante para o tema
+
+---
+
+## 9. /pauta-conteudo — revisão geral
+
+Revisar para sair mais acionável: cada post com briefing suficiente para executar, equilíbrio 40/30/20/10 respeitado, formatos /post e /story sugeridos adequadamente.
+
+---
+
+## 10. /post e /story — formato visual e entrega em JPG
+
+- Integrar `frontend-design` skill obrigatoriamente
+- Dimensões fixas: post **1080x1080**, story **1080x1920**
+- Automatizar entrega em JPG via Playwright (HTML→screenshot→JPG)
+- Buscar referência de imagens em banco quando relevante
+
+---
