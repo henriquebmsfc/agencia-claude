@@ -62,7 +62,7 @@ asyncio.run(export_pdf())
 
 Se Playwright não estiver instalado:
 ```bash
-pip3 install playwright && python3 -m playwright install chromium
+pip install playwright && python -m playwright install chromium
 ```
 
 ## Ao finalizar

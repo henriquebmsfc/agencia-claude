@@ -69,8 +69,12 @@ async def export_post():
         page = await browser.new_page(viewport={"width": 1080, "height": 1080})
         await page.goto(f"file://{INPUT_HTML.resolve()}", wait_until="networkidle")
         await page.wait_for_timeout(2000)
-        await page.screenshot(path=str(OUTPUT_JPG), type="jpeg", quality=92,
-                              clip={"x": 0, "y": 0, "width": 1080, "height": 1080})
+        post = await page.query_selector(".post")
+        if post:
+            await post.screenshot(path=str(OUTPUT_JPG), type="jpeg", quality=92)
+        else:
+            await page.screenshot(path=str(OUTPUT_JPG), type="jpeg", quality=92,
+                                  clip={"x": 0, "y": 0, "width": 1080, "height": 1080})
         await browser.close()
 
 asyncio.run(export_post())

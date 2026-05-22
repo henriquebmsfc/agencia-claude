@@ -85,16 +85,16 @@ SLIDE_W, SLIDE_H = 1350, 1080
 async def export_slides():
     async with async_playwright() as p:
         browser = await p.chromium.launch()
-        page = await browser.new_page(viewport={"width": SLIDE_W, "height": SLIDE_H})
+        page = await browser.new_page(viewport={"width": SLIDE_W + 40, "height": SLIDE_H + 200})
         await page.goto(f"file://{INPUT_HTML.resolve()}", wait_until="networkidle")
         await page.wait_for_timeout(2000)
 
         slides = await page.query_selector_all(".slide")
         for i, slide in enumerate(slides):
-            box = await slide.bounding_box()
-            await page.screenshot(
+            await slide.scroll_into_view_if_needed()
+            await page.wait_for_timeout(200)
+            await slide.screenshot(
                 path=str(OUTPUT_DIR / f"slide_{i+1:02d}.jpg"),
-                clip={"x": box["x"], "y": box["y"], "width": SLIDE_W, "height": SLIDE_H},
                 type="jpeg",
                 quality=92,
             )
@@ -105,7 +105,7 @@ asyncio.run(export_slides())
 
 Se Playwright não estiver instalado:
 ```bash
-pip3 install playwright && python3 -m playwright install chromium
+pip install playwright && python -m playwright install chromium
 ```
 
 ## Ao finalizar

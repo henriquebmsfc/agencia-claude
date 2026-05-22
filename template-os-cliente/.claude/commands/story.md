@@ -76,10 +76,10 @@ async def export_stories():
         stories = await page.query_selector_all(".story")
         if stories:
             for i, story in enumerate(stories):
-                box = await story.bounding_box()
-                await page.screenshot(
+                await story.scroll_into_view_if_needed()
+                await page.wait_for_timeout(200)
+                await story.screenshot(
                     path=str(OUTPUT_DIR / f"story_{i+1:02d}.jpg"),
-                    clip={"x": box["x"], "y": box["y"], "width": 1080, "height": 1920},
                     type="jpeg", quality=92,
                 )
         else:
