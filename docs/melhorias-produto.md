@@ -2,9 +2,11 @@
 
 Backlog de decisões adiadas e comportamentos que precisam de definição. Não são bugs — são escolhas que precisam de mais contexto antes de implementar.
 
+Itens marcados com ✅ estão concluídos — apagar na próxima limpeza do arquivo.
+
 ---
 
-## 1. Pré-checagem: comportamento no caminho "complementar"
+## ✅ 1. Pré-checagem: comportamento no caminho "complementar"
 
 **Onde:** `/instalar` — seção "Pré-checagem / Arquivos de contexto"
 
@@ -31,7 +33,7 @@ O comportamento de **complementar** não está definido. O sistema não sabe:
 
 ---
 
-## 2. Fase 5 removida — pasta renomeada pelo consultor
+## ✅ 2. Fase 5 removida — pasta renomeada pelo consultor
 
 **Contexto:** A fase de renomear a pasta foi removida do `/instalar` porque o consultor faz o setup inicial antes de entregar ao cliente. Quando o dono rodar `/instalar`, a pasta já terá o nome correto.
 
@@ -39,7 +41,7 @@ O comportamento de **complementar** não está definido. O sistema não sabe:
 
 ---
 
-## 3. Pasta de imagens no template
+## ✅ 3. Pasta de imagens no template
 
 Criar pasta `imagens/` no template para o cliente salvar fotos usadas em carrossel, site e link page. As skills visuais devem referenciar essa pasta ao gerar conteúdo.
 

@@ -4,7 +4,7 @@ Crie ou atualize o arquivo `site/index.html` com um site de conversão para o ne
 
 ## Antes de começar
 
-Leia os arquivos `_memoria/empresa.md`, `_memoria/preferencias.md` e `identidade/design-guide.md` antes de começar.
+Leia os arquivos `_memoria/empresa.md`, `_memoria/preferencias.md` e `identidade/design-guide.md` antes de começar. Verifique também se há imagens em `imagens/` — se existirem, priorizá-las no layout ao invés de placeholders.
 
 ## Estrutura do site
 
