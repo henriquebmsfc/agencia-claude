@@ -47,57 +47,44 @@ Criar pasta `imagens/` no template para o cliente salvar fotos usadas em carross
 
 ---
 
-## 4. Vícios de linguagem de IA
+## ✅ 4. Vícios de linguagem de IA
 
-Adicionar instrução no CLAUDE.md e/ou `preferencias.md` proibindo vícios comuns: "mergulhar", "navegar", "no mundo de hoje", "é fundamental", "vale ressaltar", "em um mundo cada vez mais", listas excessivas, aberturas com "Claro!".
-
-**Pesquisar:** se existe skill ou plugin que detecta e corrige esse padrão automaticamente antes de entregar qualquer output.
+Adicionada lista de expressões proibidas no `CLAUDE.md` e no template `_memoria/preferencias.md`. Não existe skill/plugin disponível para detecção automática — a instrução no CLAUDE.md já carrega em toda sessão.
 
 ---
 
-## 5. /proposta — gerar PDF formatado
+## ✅ 5. /proposta — gerar PDF formatado
 
-Atualmente gera `.md`. Precisa gerar PDF na identidade visual da empresa (cores, tipografia do design-guide). Avaliar: HTML→PDF via Playwright, ou HTML intermediário que o cliente imprime como PDF.
-
----
-
-## 6. Skills visuais — integração com frontend-design skill
-
-Verificar se `/gerar-site`, `/gerar-link-page`, `/carrossel`, `/post` e `/story` estão chamando `frontend-design:frontend-design` antes de gerar HTML. Se não, adicionar a chamada.
-
-**Pesquisar também:** skills ou plugins que elevam qualidade visual para designs mais ousados.
+Skill reescrita: gera HTML estilizado com identidade visual do design-guide, depois converte para PDF via Playwright (`page.pdf()`). Saída em `outputs/propostas/proposta-[cliente]-[data].pdf`.
 
 ---
 
-## 7. /gerar-site — referências visuais e imagens
+## ✅ 6. Skills visuais — integração com frontend-design skill
 
-- Buscar referências de imagens reais (Unsplash, Pexels) — priorizar imagens sobre placeholders genéricos
-- Buscar referências de design no Dribbble antes de gerar (pesquisar como integrar ou simular na skill)
-- Instrução explícita para priorizar seções com foto no layout
+Adicionada referência condicional ao `frontend-design:frontend-design` em `/gerar-site` e `/gerar-link-page` + diretrizes de qualidade visual inline (funciona mesmo sem o plugin). `/carrossel`, `/post` e `/story` receberão a integração quando forem convertidas para HTML (melhorias #8 e #10).
 
 ---
 
-## 8. /carrossel — formato, geração e entrega em JPG
+## ✅ 7. /gerar-site — referências visuais e imagens
 
-- Fluxo atual: gera `.md` → gera HTML → precisa entregar JPG. Automatizar HTML→JPG via Playwright
-- Formato fixo: **1350x1080px**
-- Não enumerar slides no output visual ("Slide 1", "Slide 2" etc.)
-- Integrar `frontend-design` skill obrigatoriamente
-- Buscar referência de imagens em banco (Unsplash, Pexels) quando relevante para o tema
+Adicionada seção "Imagens" na skill: prioridade 1 = pasta `imagens/`, prioridade 2 = Unsplash via URL direta, proibido placeholder de cor sólida. Dribbble não é integrável automaticamente (sem API pública) — instrução de qualidade visual cobre isso via padrão de design no "Antes de começar".
 
 ---
 
-## 9. /pauta-conteudo — revisão geral
+## ✅ 8. /carrossel — formato, geração e entrega em JPG
 
-Revisar para sair mais acionável: cada post com briefing suficiente para executar, equilíbrio 40/30/20/10 respeitado, formatos /post e /story sugeridos adequadamente.
+Skill reescrita em 3 fases: roteiro → HTML (1350×1080px, sem enumeração, frontend-design, Unsplash) → JPG via Playwright. Cada slide exportado como `slide_NN.jpg` em subpasta.
 
 ---
 
-## 10. /post e /story — formato visual e entrega em JPG
+## ✅ 9. /pauta-conteudo — revisão geral
 
-- Integrar `frontend-design` skill obrigatoriamente
-- Dimensões fixas: post **1080x1080**, story **1080x1920**
-- Automatizar entrega em JPG via Playwright (HTML→screenshot→JPG)
-- Buscar referência de imagens em banco quando relevante
+Skill reescrita: cada item agora tem Tema + Formato + Objetivo + Ângulo + Referência visual + Skill para executar. Meta do mês no topo. Equilíbrio 40/30/20/10 mantido.
+
+---
+
+## ✅ 10. /post e /story — formato visual e entrega em JPG
+
+Skills reescritas em 3 fases: roteiro → HTML (post 1080×1080, story 1080×1920, frontend-design, Unsplash) → JPG via Playwright. Dimensões fixas, frontend-design integrado, Unsplash para imagens.
 
 ---

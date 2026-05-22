@@ -4,7 +4,11 @@ Crie ou atualize o arquivo `link-page/index.html` com uma link page para a bio d
 
 ## Antes de começar
 
+Se o plugin `frontend-design` estiver disponível, use a skill `frontend-design:frontend-design` para orientar as decisões de design antes de gerar o HTML.
+
 Leia os arquivos `_memoria/empresa.md`, `_memoria/preferencias.md` e `identidade/design-guide.md` antes de começar.
+
+**Padrão de qualidade visual:** link page é a primeira impressão do cliente. Escolha fonte com personalidade (do design-guide ou equivalente), botões com peso visual correto, espaçamento que respira. Não use gradiente genérico nem botões com cantos arredondados iguais — cada negócio tem uma identidade visual única.
 
 ## Estrutura da link page
 

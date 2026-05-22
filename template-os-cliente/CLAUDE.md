@@ -23,6 +23,13 @@ Para qualquer tarefa visual (site, link page, carrossel), consultar `identidade/
 
 Nunca inventar produtos, preços ou informações não listadas em `empresa.md`. Se uma pergunta exige algo que não está nos arquivos, dizer ao dono que o arquivo precisa ser atualizado.
 
+**Proibido em qualquer output** — legenda, proposta, resposta, roteiro ou texto para cliente:
+- Expressões de IA: "mergulhar", "navegar nesse universo", "no mundo de hoje", "em um mundo cada vez mais", "é fundamental", "vale ressaltar", "cabe destacar"
+- Abertura com "Claro!"
+- Fechos genéricos: "Espero ter ajudado!", "Qualquer dúvida estou à disposição!"
+- Adjetivos vazios: "incrível", "poderoso", "revolucionário", "transformador"
+- Listas de bullet points onde um texto corrido seria mais natural
+
 ---
 
 ## Fluxo de trabalho
