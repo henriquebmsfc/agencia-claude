@@ -8,17 +8,26 @@ Esse é o primeiro comando a rodar depois de clonar o repositório. Não pode so
 
 ### Arquivos de contexto
 
-Verificar se algum arquivo de memória já tem conteúdo real (não só placeholders):
-- `_memoria/empresa.md`
-- `_memoria/preferencias.md`
-- `_memoria/estrategia.md`
-- `_memoria/diagnostico.md`
+Ler os quatro arquivos de memória e o `identidade/design-guide.md`. Para cada seção, classificar:
+- **Real** = texto sem colchetes `[...]`
+- **Placeholder** = texto entre `[...]` ou seção vazia
 
-Se algum já tiver conteúdo, perguntar:
+**Cenário A — Setup limpo** (todos os campos são placeholder)
+→ Seguir direto para a Fase 1.
 
-> "Já tem contexto preenchido aqui. Quer recomeçar do zero ou complementar o que falta?"
+**Cenário B — Setup incompleto** (alguns campos preenchidos, outros não)
+→ Montar lista do que falta com base no mapeamento das perguntas abaixo.
+→ Apresentar:
 
-Se for setup limpo, seguir direto.
+> "Já tem algumas informações aqui. Falta preencher: [lista curta das seções vazias]. Completo só o que falta ou você quer recomeçar do zero?"
+
+→ Se "recomeçar": apagar conteúdo dos arquivos e rodar normalmente.
+→ Se "complementar": ativar **modo seletivo** — em cada pergunta da Fase 2, verificar se o campo alvo já tem conteúdo real. Se sim, pular. Se não, fazer a pergunta.
+
+**Cenário C — Setup completo** (todos os campos preenchidos)
+→ Não rodar o fluxo. Avisar:
+
+> "Todos os arquivos já estão preenchidos. Para atualizar alguma informação, use `/atualizar`. Quer recomeçar do zero mesmo assim?"
 
 ---
 
@@ -44,6 +53,8 @@ A resposta calibra o tom das sugestões e o nível de complexidade das skills.
 ## Fase 2 — Entrevista
 
 Fazer as perguntas em ordem, esperando a resposta de cada uma antes de seguir. Se a resposta vier vaga, pedir concretude uma vez. Não insistir — registrar o que veio.
+
+**Em modo seletivo (complementar):** antes de cada pergunta, verificar se o campo alvo já tem conteúdo real. Se sim, pular silenciosamente e ir para a próxima.
 
 **Sobre o negócio:**
 
