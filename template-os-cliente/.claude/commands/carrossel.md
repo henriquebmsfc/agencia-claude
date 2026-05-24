@@ -49,7 +49,7 @@ Após o roteiro, perguntar: **"Roteiro ok? Posso gerar o visual?"**
 
 Apenas após aprovação do roteiro, gerar o arquivo `outputs/conteudo/carrossel-[tema]-[data].html`.
 
-**Dimensões:** cada slide 1350×1080px (proporção 5:4 — formato paisagem padrão de carrossel).
+**Dimensões:** cada slide 1080×1350px (proporção 4:5 — formato retrato padrão de carrossel do Instagram).
 
 **Requisitos visuais:**
 - Cores e tipografia do `design-guide.md` via variáveis CSS
@@ -62,7 +62,7 @@ Apenas após aprovação do roteiro, gerar o arquivo `outputs/conteudo/carrossel
 
 **Imagens:**
 - Prioridade 1: imagens da pasta `imagens/` se relevantes para o tema
-- Prioridade 2: Unsplash via URL (`https://images.unsplash.com/photo-[ID]?w=1350&q=80`)
+- Prioridade 2: Unsplash via URL (`https://images.unsplash.com/photo-[ID]?w=1080&q=80`)
 - Nunca usar placeholder de cor sólida como fundo principal
 
 Após gerar o HTML, perguntar: **"Visual aprovado? Exporto os slides em JPG?"**
@@ -80,7 +80,7 @@ INPUT_HTML = Path("outputs/conteudo/carrossel-[tema]-[data].html")
 OUTPUT_DIR = INPUT_HTML.parent / f"carrossel-[tema]-[data]"
 OUTPUT_DIR.mkdir(exist_ok=True)
 
-SLIDE_W, SLIDE_H = 1350, 1080
+SLIDE_W, SLIDE_H = 1080, 1350
 
 async def export_slides():
     async with async_playwright() as p:
