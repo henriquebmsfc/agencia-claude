@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IA da Empresa</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy:    #1B3566;
+      --navy2:   #152d58;
+      --navy3:   #0f2244;
+      --sidebar: #111f3d;
+      --surface: #1e3460;
+      --border:  rgba(255,255,255,.08);
+      --mint:    #4ECBA3;
+      --mint-dim:rgba(78,203,163,.12);
+      --w90:     rgba(255,255,255,.90);
+      --w60:     rgba(255,255,255,.60);
+      --w30:     rgba(255,255,255,.30);
+      --w10:     rgba(255,255,255,.07);
+    }
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html, body { height:100%; overflow:hidden; }
+    body {
+      font-family:'Outfit', sans-serif;
+      background: var(--navy2);
+      color: var(--w90);
+      display: flex;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: 256px;
+      flex-shrink: 0;
+      background: var(--sidebar);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    .sidebar-brand {
+      padding: 1.4rem 1.2rem 1.1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .brand-label {
+      font-size: .6rem;
+      font-weight: 500;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--mint);
+      margin-bottom: .35rem;
+    }
+    .brand-name {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--w90);
+    }
+
+    .sidebar-section {
+      padding: 1rem .75rem .5rem;
+    }
+    .section-label {
+      font-size: .6rem;
+      font-weight: 600;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--w30);
+      padding: 0 .5rem .5rem;
+    }
+
+    .skill-btn {
+      display: flex;
+      align-items: center;
+      gap: .7rem;
+      width: 100%;
+      padding: .65rem .75rem;
+      border-radius: 10px;
+      border: none;
+      background: none;
+      color: var(--w60);
+      font-family: 'Outfit', sans-serif;
+      font-size: .85rem;
+      font-weight: 400;
+      cursor: pointer;
+      text-align: left;
+      transition: all .2s;
+      margin-bottom: 2px;
+    }
+    .skill-btn:hover { background: var(--w10); color: var(--w90); }
+    .skill-btn.active { background: var(--mint-dim); color: var(--mint); font-weight: 500; }
+    .skill-icon {
+      width: 30px; height: 30px;
+      border-radius: 8px;
+      background: var(--w10);
+      display: flex; align-items:center; justify-content:center;
+      flex-shrink: 0;
+      transition: background .2s;
+    }
+    .skill-btn.active .skill-icon { background: rgba(78,203,163,.2); }
+    .skill-btn:hover .skill-icon { background: rgba(255,255,255,.1); }
+    .skill-icon svg { width:15px; height:15px; }
+
+    .new-chat-btn {
+      margin: .75rem;
+      display: flex; align-items:center; justify-content:center; gap: .5rem;
+      padding: .6rem;
+      border-radius: 10px;
+      border: 1px dashed rgba(78,203,163,.3);
+      background: none;
+      color: var(--mint);
+      font-family: 'Outfit', sans-serif;
+      font-size: .8rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all .2s;
+      margin-top: auto;
+      margin-bottom: 1rem;
+    }
+    .new-chat-btn:hover { background: var(--mint-dim); border-color: var(--mint); }
+    .new-chat-btn svg { width:14px; height:14px; }
+
+    /* ── MAIN ── */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      padding: .9rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      flex-shrink: 0;
+    }
+    .topbar-title {
+      font-size: .9rem;
+      font-weight: 600;
+      flex: 1;
+    }
+    .topbar-badge {
+      font-size: .7rem;
+      padding: .2rem .65rem;
+      border-radius: 20px;
+      background: var(--mint-dim);
+      color: var(--mint);
+      font-weight: 500;
+    }
+
+    /* ── MESSAGES ── */
+    .messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      scroll-behavior: smooth;
+    }
+    .messages::-webkit-scrollbar { width: 4px; }
+    .messages::-webkit-scrollbar-track { background: transparent; }
+    .messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    /* Empty state */
+    .empty-state {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      padding: 2rem;
+      text-align: center;
+    }
+    .empty-icon {
+      width: 52px; height: 52px;
+      border-radius: 16px;
+      background: var(--mint-dim);
+      display: flex; align-items:center; justify-content:center;
+      color: var(--mint);
+    }
+    .empty-icon svg { width:26px; height:26px; }
+    .empty-title { font-size: 1.1rem; font-weight: 600; }
+    .empty-sub { font-size: .85rem; color: var(--w60); max-width: 340px; line-height: 1.6; }
+    .quick-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .65rem;
+      width: 100%;
+      max-width: 480px;
+      margin-top: .5rem;
+    }
+    .quick-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: .9rem 1rem;
+      cursor: pointer;
+      text-align: left;
+      transition: all .2s;
+    }
+    .quick-card:hover { border-color: rgba(78,203,163,.3); background: rgba(78,203,163,.05); }
+    .quick-card-label { font-size: .72rem; color: var(--mint); font-weight: 500; margin-bottom: .2rem; }
+    .quick-card-desc { font-size: .8rem; color: var(--w60); line-height: 1.4; }
+
+    /* Message bubbles */
+    .msg { display: flex; gap: .75rem; max-width: 780px; }
+    .msg.user { flex-direction: row-reverse; margin-left: auto; }
+    .msg-avatar {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex; align-items:center; justify-content:center;
+      font-size: .75rem; font-weight: 600;
+    }
+    .msg.assistant .msg-avatar { background: var(--mint-dim); color: var(--mint); }
+    .msg.user .msg-avatar { background: rgba(96,165,250,.2); color: #60a5fa; }
+    .msg-body { flex: 1; min-width: 0; }
+    .msg-bubble {
+      padding: .85rem 1rem;
+      border-radius: 14px;
+      font-size: .88rem;
+      line-height: 1.65;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .msg.assistant .msg-bubble {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-top-left-radius: 4px;
+    }
+    .msg.user .msg-bubble {
+      background: var(--mint);
+      color: var(--navy3);
+      font-weight: 500;
+      border-top-right-radius: 4px;
+    }
+    .msg-time {
+      font-size: .68rem;
+      color: var(--w30);
+      margin-top: .3rem;
+      padding: 0 .25rem;
+    }
+    .msg.user .msg-time { text-align: right; }
+
+    /* Typing cursor */
+    .cursor {
+      display: inline-block;
+      width: 2px; height: 14px;
+      background: var(--mint);
+      margin-left: 2px;
+      vertical-align: middle;
+      animation: blink .7s steps(1) infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    /* Tool events */
+    .tool-event {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .75rem;
+      color: var(--w30);
+      padding: .2rem 0;
+      font-family: 'Outfit', monospace;
+    }
+    .tool-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--mint);
+      flex-shrink: 0;
+      opacity: .6;
+    }
+
+    /* Markdown-like formatting */
+    .msg-bubble strong { font-weight: 600; }
+    .msg-bubble em { font-style: italic; color: var(--w60); }
+
+    /* ── INPUT BAR ── */
+    .input-bar {
+      padding: 1rem 1.5rem 1.2rem;
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .input-wrap {
+      display: flex;
+      align-items: flex-end;
+      gap: .65rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: .6rem .65rem .6rem 1rem;
+      transition: border-color .2s;
+    }
+    .input-wrap:focus-within { border-color: rgba(78,203,163,.35); }
+    .input-wrap textarea {
+      flex: 1;
+      background: none;
+      border: none;
+      outline: none;
+      color: var(--w90);
+      font-family: 'Outfit', sans-serif;
+      font-size: .9rem;
+      resize: none;
+      max-height: 140px;
+      min-height: 24px;
+      line-height: 1.5;
+    }
+    .input-wrap textarea::placeholder { color: var(--w30); }
+    .send-btn {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      background: var(--mint);
+      border: none;
+      cursor: pointer;
+      display: flex; align-items:center; justify-content:center;
+      color: var(--navy3);
+      flex-shrink: 0;
+      transition: all .2s;
+    }
+    .send-btn:hover { background: #fff; }
+    .send-btn:disabled { background: var(--w10); color: var(--w30); cursor: not-allowed; }
+    .send-btn svg { width: 16px; height: 16px; }
+    .input-hint { font-size: .68rem; color: var(--w30); margin-top: .4rem; padding: 0 .25rem; }
+  </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-label">IA da empresa</div>
+    <div class="brand-name" id="empresaNome">Carregando…</div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="section-label">Skills</div>
+
+    <button class="skill-btn active" id="btn-chat" onclick="setSkill('chat', this)">
+      <span class="skill-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+        </svg>
+      </span>
+      Chat livre
+    </button>
+
+    <button class="skill-btn" id="btn-carrossel" onclick="setSkill('carrossel', this)">
+      <span class="skill-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+          <rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
+        </svg>
+      </span>
+      Carrossel
+    </button>
+
+    <button class="skill-btn" id="btn-legenda" onclick="setSkill('legenda', this)">
+      <span class="skill-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="17" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/>
+          <line x1="21" y1="14" x2="3" y2="14"/><line x1="17" y1="18" x2="3" y2="18"/>
+        </svg>
+      </span>
+      Legenda
+    </button>
+
+    <button class="skill-btn" id="btn-proposta" onclick="setSkill('proposta', this)">
+      <span class="skill-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+        </svg>
+      </span>
+      Proposta
+    </button>
+
+    <button class="skill-btn" id="btn-resposta" onclick="setSkill('resposta', this)">
+      <span class="skill-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 17 4 12 9 7"/><path d="M20 18v-2a4 4 0 00-4-4H4"/>
+        </svg>
+      </span>
+      Resposta cliente
+    </button>
+
+    <button class="skill-btn" id="btn-pauta" onclick="setSkill('pauta', this)">
+      <span class="skill-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/>
+          <line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+        </svg>
+      </span>
+      Pauta de conteúdo
+    </button>
+  </div>
+
+  <button class="new-chat-btn" onclick="newChat()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+      <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+    </svg>
+    Nova conversa
+  </button>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <header class="topbar">
+    <span class="topbar-title" id="topbarTitle">Chat livre</span>
+    <span class="topbar-badge">Claude Sonnet</span>
+  </header>
+
+  <div class="messages" id="messages">
+    <!-- Empty state shown initially -->
+    <div class="empty-state" id="emptyState">
+      <div class="empty-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M12 8v4l3 3"/>
+        </svg>
+      </div>
+      <div class="empty-title">O que você precisa hoje?</div>
+      <div class="empty-sub">Use as skills no menu ou comece uma conversa livre. A IA já conhece o seu negócio.</div>
+      <div class="quick-actions">
+        <div class="quick-card" onclick="startSkill('carrossel')">
+          <div class="quick-card-label">Carrossel</div>
+          <div class="quick-card-desc">Criar conteúdo para o Instagram com a voz do negócio</div>
+        </div>
+        <div class="quick-card" onclick="startSkill('legenda')">
+          <div class="quick-card-label">Legenda</div>
+          <div class="quick-card-desc">Escrever legenda para um post pronto para publicar</div>
+        </div>
+        <div class="quick-card" onclick="startSkill('proposta')">
+          <div class="quick-card-label">Proposta</div>
+          <div class="quick-card-desc">Gerar proposta comercial personalizada para um cliente</div>
+        </div>
+        <div class="quick-card" onclick="startSkill('resposta')">
+          <div class="quick-card-label">Resposta ao cliente</div>
+          <div class="quick-card-desc">Responder mensagem no tom certo e de forma profissional</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="input-bar">
+    <div class="input-wrap">
+      <textarea
+        id="inputMsg"
+        placeholder="Digite sua mensagem…"
+        rows="1"
+        onkeydown="handleKey(event)"
+        oninput="autoResize(this)"
+      ></textarea>
+      <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </svg>
+      </button>
+    </div>
+    <div class="input-hint">Enter para enviar · Shift+Enter para nova linha</div>
+  </div>
+</div>
+
+<script>
+  const SKILLS = {
+    chat:      { label: 'Chat livre',         prompt: null },
+    carrossel: { label: 'Carrossel',          prompt: 'Quero criar um carrossel para o Instagram. Me faça as perguntas necessárias para começar.' },
+    legenda:   { label: 'Legenda',            prompt: 'Preciso de uma legenda para um post. Me faça as perguntas para gerar.' },
+    proposta:  { label: 'Proposta',           prompt: 'Preciso gerar uma proposta comercial. Me faça as perguntas necessárias.' },
+    resposta:  { label: 'Resposta ao cliente',prompt: 'Preciso responder uma mensagem de cliente. Qual é a mensagem que você recebeu?' },
+    pauta:     { label: 'Pauta de conteúdo',  prompt: 'Quero montar a pauta de conteúdo do mês. Me faça as perguntas para começar.' },
+  };
+
+  let messages = [];
+  let currentSkill = 'chat';
+  let streaming = false;
+
+  // Load company info
+  fetch('/api/info')
+    .then(r => r.json())
+    .then(d => { document.getElementById('empresaNome').textContent = d.nome || 'Minha Empresa'; })
+    .catch(() => {});
+
+  function setSkill(skill, btn) {
+    currentSkill = skill;
+    document.querySelectorAll('.skill-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('topbarTitle').textContent = SKILLS[skill].label;
+  }
+
+  function startSkill(skill) {
+    const btn = document.getElementById('btn-' + skill);
+    if (btn) setSkill(skill, btn);
+    const prompt = SKILLS[skill]?.prompt;
+    if (prompt) {
+      document.getElementById('inputMsg').value = prompt;
+      sendMessage();
+    }
+  }
+
+  function newChat() {
+    messages = [];
+    const container = document.getElementById('messages');
+    container.innerHTML = `
+      <div class="empty-state" id="emptyState">
+        <div class="empty-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>
+          </svg>
+        </div>
+        <div class="empty-title">O que você precisa hoje?</div>
+        <div class="empty-sub">Use as skills no menu ou comece uma conversa livre. A IA já conhece o seu negócio.</div>
+        <div class="quick-actions">
+          <div class="quick-card" onclick="startSkill('carrossel')">
+            <div class="quick-card-label">Carrossel</div>
+            <div class="quick-card-desc">Criar conteúdo para o Instagram com a voz do negócio</div>
+          </div>
+          <div class="quick-card" onclick="startSkill('legenda')">
+            <div class="quick-card-label">Legenda</div>
+            <div class="quick-card-desc">Escrever legenda para um post pronto para publicar</div>
+          </div>
+          <div class="quick-card" onclick="startSkill('proposta')">
+            <div class="quick-card-label">Proposta</div>
+            <div class="quick-card-desc">Gerar proposta comercial personalizada para um cliente</div>
+          </div>
+          <div class="quick-card" onclick="startSkill('resposta')">
+            <div class="quick-card-label">Resposta ao cliente</div>
+            <div class="quick-card-desc">Responder mensagem no tom certo e de forma profissional</div>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  function handleKey(e) {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+  }
+
+  function autoResize(el) {
+    el.style.height = 'auto';
+    el.style.height = Math.min(el.scrollHeight, 140) + 'px';
+  }
+
+  function now() {
+    return new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+  }
+
+  function addMessage(role, text) {
+    const empty = document.getElementById('emptyState');
+    if (empty) empty.remove();
+
+    const container = document.getElementById('messages');
+    const initials = role === 'user' ? 'VC' : 'IA';
+    const div = document.createElement('div');
+    div.className = `msg ${role}`;
+    div.innerHTML = `
+      <div class="msg-avatar">${initials}</div>
+      <div class="msg-body">
+        <div class="msg-bubble" id="bubble-${Date.now()}">${escapeHtml(text)}</div>
+        <div class="msg-time">${now()}</div>
+      </div>`;
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
+    return div.querySelector('.msg-bubble');
+  }
+
+  function escapeHtml(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function formatText(s) {
+    return s
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.+?)\*/g, '<em>$1</em>')
+      .replace(/\n/g, '<br>');
+  }
+
+  function toolLabel(event) {
+    const labels = { Read:'Lendo', Write:'Escrevendo', Edit:'Editando', Bash:'Executando', Glob:'Buscando', Grep:'Pesquisando' };
+    const verb = labels[event.name] || event.name;
+    const detail = event.path ? event.path.split('/').slice(-2).join('/') : (event.command || '');
+    return `${verb}${detail ? ' ' + detail : ''}`;
+  }
+
+  async function sendMessage() {
+    if (streaming) return;
+    const input = document.getElementById('inputMsg');
+    const text = input.value.trim();
+    if (!text) return;
+
+    input.value = '';
+    input.style.height = 'auto';
+    document.getElementById('sendBtn').disabled = true;
+    streaming = true;
+
+    messages.push({ role: 'user', content: text });
+    addMessage('user', text);
+
+    const bubble = addMessage('assistant', '');
+    bubble.innerHTML = '<span class="cursor"></span>';
+
+    let fullText = '';
+    const container = document.getElementById('messages');
+
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: text,
+          skill: currentSkill,
+          history: messages
+        })
+      });
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop();
+
+        for (const line of lines) {
+          if (!line.startsWith('data: ')) continue;
+          const data = line.slice(6).trim();
+          if (data === '[DONE]') break;
+          try {
+            const ev = JSON.parse(data);
+            if (ev.type === 'text') {
+              fullText += ev.text;
+              bubble.innerHTML = formatText(escapeHtml(fullText)) + '<span class="cursor"></span>';
+            } else if (ev.type === 'tool') {
+              const toolEl = document.createElement('div');
+              toolEl.className = 'tool-event';
+              toolEl.innerHTML = `<span class="tool-dot"></span>${toolLabel(ev)}`;
+              bubble.parentElement.insertBefore(toolEl, bubble);
+            } else if (ev.type === 'error') {
+              fullText += `\n\nErro: ${ev.message}`;
+            }
+          } catch {}
+        }
+        container.scrollTop = container.scrollHeight;
+      }
+    } catch (err) {
+      fullText = 'Erro de conexão. Verifique se o servidor está rodando.';
+    }
+
+    bubble.innerHTML = formatText(escapeHtml(fullText));
+    messages.push({ role: 'assistant', content: fullText });
+
+    streaming = false;
+    document.getElementById('sendBtn').disabled = false;
+    document.getElementById('inputMsg').focus();
+  }
+</script>
+</body>
+</html>
