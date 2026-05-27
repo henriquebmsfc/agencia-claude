@@ -491,6 +491,18 @@
 
     /* hidden rows for filter */
     tr.hidden { display: none; }
+
+    /* ── VIEWS ── */
+    .view { display: none; }
+    .view.active { display: block; }
+
+    /* ── BADGE STATUS FINANCEIRO ── */
+    .s-pago       { background: rgba(78,203,163,.15);  color: var(--mint); }
+    .s-pago::before { background: var(--mint); }
+    .s-pendente   { background: rgba(251,191,36,.15);  color: var(--yellow); }
+    .s-pendente::before { background: var(--yellow); }
+    .s-entrada    { background: rgba(78,203,163,.12);  color: var(--mint); font-size: .68rem; font-weight: 600; padding: .15rem .55rem; border-radius: 6px; }
+    .s-saida      { background: rgba(248,113,113,.12); color: var(--red);  font-size: .68rem; font-weight: 600; padding: .15rem .55rem; border-radius: 6px; }
   </style>
 </head>
 <body>
@@ -514,21 +526,21 @@
 
   <nav class="nav">
     <div class="nav-label">Menu</div>
-    <a class="nav-item active" href="#">
+    <a class="nav-item active" href="#" onclick="switchView('pacientes', this)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
       Pacientes
       <span class="badge">48</span>
     </a>
-    <a class="nav-item" href="#">
+    <a class="nav-item" href="#" onclick="switchView('pacientes', this)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
       Agendamentos
       <span class="badge">6</span>
     </a>
-    <a class="nav-item" href="#">
+    <a class="nav-item" href="#" onclick="switchView('pacientes', this)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3C9 3 6 5.5 6 9.5c0 2 .8 4 2 5.5L9 20h6l1-5c1.2-1.5 2-3.5 2-5.5C18 5.5 15 3 12 3z"/></svg>
       Tratamentos
     </a>
-    <a class="nav-item" href="#">
+    <a class="nav-item" href="#" onclick="switchView('financeiro', this)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
       Financeiro
     </a>
@@ -550,6 +562,9 @@
 
 <!-- ── MAIN ── -->
 <div class="main">
+
+  <!-- VIEW: PACIENTES -->
+  <div id="view-pacientes" class="view active">
 
   <!-- TOPBAR -->
   <header class="topbar">
@@ -832,7 +847,277 @@
     </div>
 
   </div><!-- /content -->
+  </div><!-- /view-pacientes -->
+
+  <!-- VIEW: FINANCEIRO -->
+  <div id="view-financeiro" class="view">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <span class="topbar-title">Financeiro</span>
+    <div class="icon-btn" title="Notificações">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+      <span class="notif-dot"></span>
+    </div>
+    <button class="btn-new" onclick="openModalLancamento()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Novo Lançamento
+    </button>
+  </header>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- KPI CARDS -->
+    <div class="stats">
+      <div class="stat-card c-mint">
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        </div>
+        <div class="stat-value">R$ 18.400</div>
+        <div class="stat-label">Faturamento Maio</div>
+        <div class="stat-delta">+12% vs abril</div>
+      </div>
+      <div class="stat-card c-blue">
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>
+        </div>
+        <div class="stat-value">R$ 14.200</div>
+        <div class="stat-label">Recebido</div>
+        <div class="stat-delta" style="color:#60a5fa">77% do total</div>
+      </div>
+      <div class="stat-card c-yellow">
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div class="stat-value">R$ 4.200</div>
+        <div class="stat-label">A Receber</div>
+        <div class="stat-delta" style="color:var(--yellow)">3 pendências</div>
+      </div>
+      <div class="stat-card c-red">
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <div class="stat-value">R$ 1.850</div>
+        <div class="stat-label">Inadimplência</div>
+        <div class="stat-delta" style="color:var(--red)">2 pacientes</div>
+      </div>
+    </div>
+
+    <!-- LANÇAMENTOS PANEL -->
+    <div class="panel">
+      <div class="panel-head">
+        <span class="panel-title">Lançamentos Recentes</span>
+        <div class="filter-tabs">
+          <button class="tab active" onclick="filterLanc('todos', this)">Todos</button>
+          <button class="tab" onclick="filterLanc('entrada', this)">Entradas</button>
+          <button class="tab" onclick="filterLanc('saida', this)">Saídas</button>
+          <button class="tab" onclick="filterLanc('pendente', this)">Pendentes</button>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table id="lancTable">
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Paciente / Descrição</th>
+              <th>Serviço</th>
+              <th>Tipo</th>
+              <th>Valor</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <tr data-tipo="entrada" data-status="pago">
+              <td><span class="cell-sm">22/05/2026</span></td>
+              <td>
+                <div class="patient-cell">
+                  <div class="avatar" style="background:rgba(96,165,250,.15);color:#60a5fa">MC</div>
+                  <div><div class="patient-name">Mariana Costa</div><div class="patient-phone">Paciente ativo</div></div>
+                </div>
+              </td>
+              <td><span class="cell-sm">Reabilitação Oral</span></td>
+              <td><span class="s-entrada">Entrada</span></td>
+              <td><span class="cell-sm" style="color:var(--mint);font-weight:600">+ R$ 1.200</span></td>
+              <td><span class="badge-status s-pago">Pago</span></td>
+              <td><div class="action-row"><button class="act-btn" title="Ver detalhe"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div></td>
+            </tr>
+
+            <tr data-tipo="entrada" data-status="pago">
+              <td><span class="cell-sm">20/05/2026</span></td>
+              <td>
+                <div class="patient-cell">
+                  <div class="avatar" style="background:rgba(96,165,250,.15);color:#60a5fa">AM</div>
+                  <div><div class="patient-name">Ana Maria Souza</div><div class="patient-phone">Paciente ativo</div></div>
+                </div>
+              </td>
+              <td><span class="cell-sm">Ortodontia — parcela 3/8</span></td>
+              <td><span class="s-entrada">Entrada</span></td>
+              <td><span class="cell-sm" style="color:var(--mint);font-weight:600">+ R$ 890</span></td>
+              <td><span class="badge-status s-pago">Pago</span></td>
+              <td><div class="action-row"><button class="act-btn" title="Ver detalhe"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div></td>
+            </tr>
+
+            <tr data-tipo="entrada" data-status="pago">
+              <td><span class="cell-sm">18/05/2026</span></td>
+              <td>
+                <div class="patient-cell">
+                  <div class="avatar" style="background:rgba(78,203,163,.15);color:var(--mint)">FL</div>
+                  <div><div class="patient-name">Fernanda Lima</div><div class="patient-phone">Paciente ativo</div></div>
+                </div>
+              </td>
+              <td><span class="cell-sm">Limpeza e Prevenção</span></td>
+              <td><span class="s-entrada">Entrada</span></td>
+              <td><span class="cell-sm" style="color:var(--mint);font-weight:600">+ R$ 250</span></td>
+              <td><span class="badge-status s-pago">Pago</span></td>
+              <td><div class="action-row"><button class="act-btn" title="Ver detalhe"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div></td>
+            </tr>
+
+            <tr data-tipo="entrada" data-status="pago">
+              <td><span class="cell-sm">15/05/2026</span></td>
+              <td>
+                <div class="patient-cell">
+                  <div class="avatar" style="background:rgba(78,203,163,.15);color:var(--mint)">PA</div>
+                  <div><div class="patient-name">Patricia Alves</div><div class="patient-phone">Paciente ativo</div></div>
+                </div>
+              </td>
+              <td><span class="cell-sm">Estética Dental</span></td>
+              <td><span class="s-entrada">Entrada</span></td>
+              <td><span class="cell-sm" style="color:var(--mint);font-weight:600">+ R$ 1.800</span></td>
+              <td><span class="badge-status s-pago">Pago</span></td>
+              <td><div class="action-row"><button class="act-btn" title="Ver detalhe"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div></td>
+            </tr>
+
+            <tr data-tipo="entrada" data-status="pendente">
+              <td><span class="cell-sm">12/05/2026</span></td>
+              <td>
+                <div class="patient-cell">
+                  <div class="avatar" style="background:rgba(251,191,36,.15);color:var(--yellow)">CP</div>
+                  <div><div class="patient-name">Carlos Pereira</div><div class="patient-phone">Aguarda pagamento</div></div>
+                </div>
+              </td>
+              <td><span class="cell-sm">Implante — parcela 2/6</span></td>
+              <td><span class="s-entrada">Entrada</span></td>
+              <td><span class="cell-sm" style="color:var(--yellow);font-weight:600">+ R$ 3.200</span></td>
+              <td><span class="badge-status s-pendente">Pendente</span></td>
+              <td><div class="action-row"><button class="act-btn wpp" title="Cobrar via WhatsApp" onclick="sendWpp('Carlos Pereira')"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></button></div></td>
+            </tr>
+
+            <tr data-tipo="entrada" data-status="pendente">
+              <td><span class="cell-sm">10/05/2026</span></td>
+              <td>
+                <div class="patient-cell">
+                  <div class="avatar" style="background:rgba(251,191,36,.15);color:var(--yellow)">JS</div>
+                  <div><div class="patient-name">João Silva</div><div class="patient-phone">Aguarda pagamento</div></div>
+                </div>
+              </td>
+              <td><span class="cell-sm">Cirurgia Oral</span></td>
+              <td><span class="s-entrada">Entrada</span></td>
+              <td><span class="cell-sm" style="color:var(--yellow);font-weight:600">+ R$ 2.100</span></td>
+              <td><span class="badge-status s-pendente">Pendente</span></td>
+              <td><div class="action-row"><button class="act-btn wpp" title="Cobrar via WhatsApp" onclick="sendWpp('João Silva')"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></button></div></td>
+            </tr>
+
+            <tr data-tipo="saida" data-status="pago">
+              <td><span class="cell-sm">08/05/2026</span></td>
+              <td>
+                <div class="patient-cell">
+                  <div class="avatar" style="background:rgba(248,113,113,.12);color:var(--red)">—</div>
+                  <div><div class="patient-name">Fornecedor Dental</div><div class="patient-phone">Despesa operacional</div></div>
+                </div>
+              </td>
+              <td><span class="cell-sm">Material Odontológico</span></td>
+              <td><span class="s-saida">Saída</span></td>
+              <td><span class="cell-sm" style="color:var(--red);font-weight:600">- R$ 650</span></td>
+              <td><span class="badge-status s-pago">Pago</span></td>
+              <td><div class="action-row"><button class="act-btn" title="Ver detalhe"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div></td>
+            </tr>
+
+            <tr data-tipo="saida" data-status="pago">
+              <td><span class="cell-sm">05/05/2026</span></td>
+              <td>
+                <div class="patient-cell">
+                  <div class="avatar" style="background:rgba(248,113,113,.12);color:var(--red)">—</div>
+                  <div><div class="patient-name">Imobiliária BH</div><div class="patient-phone">Despesa fixa</div></div>
+                </div>
+              </td>
+              <td><span class="cell-sm">Aluguel da Sala</span></td>
+              <td><span class="s-saida">Saída</span></td>
+              <td><span class="cell-sm" style="color:var(--red);font-weight:600">- R$ 2.400</span></td>
+              <td><span class="badge-status s-pago">Pago</span></td>
+              <td><div class="action-row"><button class="act-btn" title="Ver detalhe"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div></td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel-foot">
+        <span>Mostrando 8 de 23 lançamentos em maio</span>
+        <div class="pagination">
+          <button class="page-btn active">1</button>
+          <button class="page-btn">2</button>
+          <button class="page-btn">3</button>
+          <button class="page-btn">›</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content financeiro -->
+  </div><!-- /view-financeiro -->
+
 </div><!-- /main -->
+
+<!-- ── MODAL NOVO LANÇAMENTO ── -->
+<div class="modal-overlay" id="modalLancamento" onclick="closeModalLanc(event)">
+  <div class="modal">
+    <div class="modal-head">
+      <span class="modal-title">Novo Lançamento</span>
+      <button class="modal-close" onclick="closeModalLancBtn()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="form-grid">
+      <div class="form-group full">
+        <label>Paciente / Descrição</label>
+        <input type="text" placeholder="Ex: Ana Maria Souza ou Fornecedor Dental">
+      </div>
+      <div class="form-group full">
+        <label>Serviço / Categoria</label>
+        <input type="text" placeholder="Ex: Ortodontia parcela 3/8, Aluguel da sala…">
+      </div>
+      <div class="form-group">
+        <label>Valor (R$)</label>
+        <input type="number" placeholder="0,00" min="0" step="0.01">
+      </div>
+      <div class="form-group">
+        <label>Data</label>
+        <input type="date">
+      </div>
+      <div class="form-group">
+        <label>Tipo</label>
+        <select>
+          <option value="entrada">Entrada</option>
+          <option value="saida">Saída</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Status</label>
+        <select>
+          <option value="pago">Pago</option>
+          <option value="pendente">Pendente</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-cancel" onclick="closeModalLancBtn()">Cancelar</button>
+      <button class="btn-save">Salvar Lançamento</button>
+    </div>
+  </div>
+</div>
 
 <!-- ── MODAL NOVO PACIENTE ── -->
 <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
@@ -917,6 +1202,39 @@
     document.querySelectorAll('#patientsTable tbody tr').forEach(row => {
       const name = row.querySelector('.patient-name').textContent.toLowerCase();
       row.classList.toggle('hidden', q !== '' && !name.includes(q));
+    });
+  }
+
+  function switchView(view, clickedItem) {
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+    clickedItem.classList.add('active');
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById('view-' + view).classList.add('active');
+  }
+
+  function openModalLancamento() {
+    document.getElementById('modalLancamento').classList.add('open');
+  }
+  function closeModalLancBtn() {
+    document.getElementById('modalLancamento').classList.remove('open');
+  }
+  function closeModalLanc(e) {
+    if (e.target === document.getElementById('modalLancamento')) closeModalLancBtn();
+  }
+
+  function filterLanc(filter, btn) {
+    btn.closest('.filter-tabs').querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('#lancTable tbody tr').forEach(row => {
+      const tipo = row.dataset.tipo;
+      const status = row.dataset.status;
+      if (filter === 'todos') {
+        row.classList.remove('hidden');
+      } else if (filter === 'entrada' || filter === 'saida') {
+        row.classList.toggle('hidden', tipo !== filter);
+      } else if (filter === 'pendente') {
+        row.classList.toggle('hidden', status !== 'pendente');
+      }
     });
   }
 

@@ -1,669 +1,967 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IA da Empresa</title>
+  <title>OS da Empresa</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <script>document.documentElement.setAttribute('data-theme',localStorage.getItem('theme')||'dark');</script>
   <style>
-    :root {
-      --navy:    #1B3566;
-      --navy2:   #152d58;
-      --navy3:   #0f2244;
-      --sidebar: #111f3d;
-      --surface: #1e3460;
+    html[data-theme="dark"], html:not([data-theme]) {
+      --navy:    #1a3360;
+      --navy2:   #142b54;
+      --navy3:   #0d1e3c;
+      --sidebar: #060f22;
+      --surface: #1b3260;
       --border:  rgba(255,255,255,.08);
       --mint:    #4ECBA3;
       --mint-dim:rgba(78,203,163,.12);
-      --w90:     rgba(255,255,255,.90);
+      --w90:     rgba(255,255,255,.92);
       --w60:     rgba(255,255,255,.60);
       --w30:     rgba(255,255,255,.30);
       --w10:     rgba(255,255,255,.07);
+      --mint-a04:rgba(78,203,163,.04);
+      --mint-a20:rgba(78,203,163,.20);
+      --mint-a25:rgba(78,203,163,.25);
+      --mint-a30:rgba(78,203,163,.30);
+      --mint-a35:rgba(78,203,163,.35);
+      --mint-a40:rgba(78,203,163,.40);
+      --mint-text:var(--navy3);
+      --user-av-bg:rgba(96,165,250,.2);
+      --user-av-color:#60a5fa;
+      --overlay:rgba(6,15,35,.80);
+    }
+    html[data-theme="light"] {
+      --navy:    #D4E2F5;
+      --navy2:   #EBF2FC;
+      --navy3:   #C2D4EE;
+      --sidebar: #0C2245;
+      --surface: #FDFCFA;
+      --border:  rgba(100,78,52,.10);
+      --mint:    #127A6C;
+      --mint-dim:rgba(18,122,108,.09);
+      --w90:     rgba(8,14,28,.96);
+      --w60:     rgba(8,14,28,.68);
+      --w30:     rgba(8,14,28,.42);
+      --w10:     rgba(8,14,28,.06);
+      --mint-a04:rgba(18,122,108,.04);
+      --mint-a20:rgba(18,122,108,.20);
+      --mint-a25:rgba(18,122,108,.25);
+      --mint-a30:rgba(18,122,108,.30);
+      --mint-a35:rgba(18,122,108,.35);
+      --mint-a40:rgba(18,122,108,.40);
+      --mint-text:#ffffff;
+      --user-av-bg:rgba(37,99,235,.10);
+      --user-av-color:#1e40af;
+      --overlay:rgba(45,30,15,.30);
     }
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
     html, body { height:100%; overflow:hidden; }
-    body {
-      font-family:'Outfit', sans-serif;
-      background: var(--navy2);
-      color: var(--w90);
-      display: flex;
-      -webkit-font-smoothing: antialiased;
-    }
+    body { font-family:'Outfit',sans-serif; background:var(--navy2); color:var(--w90); display:flex; -webkit-font-smoothing:antialiased; transition:background .2s,color .2s; }
 
-    /* ── SIDEBAR ── */
-    .sidebar {
-      width: 256px;
-      flex-shrink: 0;
-      background: var(--sidebar);
-      border-right: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
+    /* Texto branco no sidebar quando em light mode (sidebar fica escuro) */
+    html[data-theme="light"] .sidebar {
+      --w90: rgba(255,255,255,.92);
+      --w60: rgba(255,255,255,.62);
+      --w30: rgba(255,255,255,.38);
+      --w10: rgba(255,255,255,.09);
+      --border: rgba(255,255,255,.12);
+      --mint: #5DD4AF;
+      --mint-dim: rgba(93,212,175,.15);
     }
-    .sidebar-brand {
-      padding: 1.4rem 1.2rem 1.1rem;
-      border-bottom: 1px solid var(--border);
-    }
-    .brand-label {
-      font-size: .6rem;
-      font-weight: 500;
-      letter-spacing: .2em;
-      text-transform: uppercase;
-      color: var(--mint);
-      margin-bottom: .35rem;
-    }
-    .brand-name {
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--w90);
-    }
-
-    .sidebar-section {
-      padding: 1rem .75rem .5rem;
-    }
-    .section-label {
-      font-size: .6rem;
-      font-weight: 600;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      color: var(--w30);
-      padding: 0 .5rem .5rem;
-    }
-
-    .skill-btn {
-      display: flex;
-      align-items: center;
-      gap: .7rem;
-      width: 100%;
-      padding: .65rem .75rem;
-      border-radius: 10px;
-      border: none;
-      background: none;
-      color: var(--w60);
-      font-family: 'Outfit', sans-serif;
-      font-size: .85rem;
-      font-weight: 400;
-      cursor: pointer;
-      text-align: left;
-      transition: all .2s;
-      margin-bottom: 2px;
-    }
-    .skill-btn:hover { background: var(--w10); color: var(--w90); }
-    .skill-btn.active { background: var(--mint-dim); color: var(--mint); font-weight: 500; }
-    .skill-icon {
-      width: 30px; height: 30px;
-      border-radius: 8px;
-      background: var(--w10);
-      display: flex; align-items:center; justify-content:center;
-      flex-shrink: 0;
-      transition: background .2s;
-    }
-    .skill-btn.active .skill-icon { background: rgba(78,203,163,.2); }
-    .skill-btn:hover .skill-icon { background: rgba(255,255,255,.1); }
-    .skill-icon svg { width:15px; height:15px; }
-
-    .new-chat-btn {
-      margin: .75rem;
-      display: flex; align-items:center; justify-content:center; gap: .5rem;
-      padding: .6rem;
-      border-radius: 10px;
-      border: 1px dashed rgba(78,203,163,.3);
-      background: none;
-      color: var(--mint);
-      font-family: 'Outfit', sans-serif;
-      font-size: .8rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all .2s;
-      margin-top: auto;
-      margin-bottom: 1rem;
-    }
-    .new-chat-btn:hover { background: var(--mint-dim); border-color: var(--mint); }
-    .new-chat-btn svg { width:14px; height:14px; }
-
-    /* ── MAIN ── */
-    .main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      overflow: hidden;
-    }
-
-    /* ── TOPBAR ── */
-    .topbar {
-      padding: .9rem 1.5rem;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: .75rem;
-      flex-shrink: 0;
-    }
-    .topbar-title {
-      font-size: .9rem;
-      font-weight: 600;
-      flex: 1;
-    }
-    .topbar-badge {
-      font-size: .7rem;
-      padding: .2rem .65rem;
-      border-radius: 20px;
-      background: var(--mint-dim);
-      color: var(--mint);
-      font-weight: 500;
-    }
-
-    /* ── MESSAGES ── */
-    .messages {
-      flex: 1;
-      overflow-y: auto;
-      padding: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      scroll-behavior: smooth;
-    }
-    .messages::-webkit-scrollbar { width: 4px; }
-    .messages::-webkit-scrollbar-track { background: transparent; }
-    .messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-
-    /* Empty state */
-    .empty-state {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 1.5rem;
-      padding: 2rem;
-      text-align: center;
-    }
-    .empty-icon {
-      width: 52px; height: 52px;
-      border-radius: 16px;
-      background: var(--mint-dim);
-      display: flex; align-items:center; justify-content:center;
-      color: var(--mint);
-    }
-    .empty-icon svg { width:26px; height:26px; }
-    .empty-title { font-size: 1.1rem; font-weight: 600; }
-    .empty-sub { font-size: .85rem; color: var(--w60); max-width: 340px; line-height: 1.6; }
-    .quick-actions {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: .65rem;
-      width: 100%;
-      max-width: 480px;
-      margin-top: .5rem;
-    }
-    .quick-card {
+    /* Modal não herda o sidebar escuro */
+    html[data-theme="light"] .modal {
       background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: .9rem 1rem;
-      cursor: pointer;
-      text-align: left;
-      transition: all .2s;
     }
-    .quick-card:hover { border-color: rgba(78,203,163,.3); background: rgba(78,203,163,.05); }
-    .quick-card-label { font-size: .72rem; color: var(--mint); font-weight: 500; margin-bottom: .2rem; }
-    .quick-card-desc { font-size: .8rem; color: var(--w60); line-height: 1.4; }
 
-    /* Message bubbles */
-    .msg { display: flex; gap: .75rem; max-width: 780px; }
-    .msg.user { flex-direction: row-reverse; margin-left: auto; }
-    .msg-avatar {
-      width: 32px; height: 32px;
-      border-radius: 50%;
-      flex-shrink: 0;
-      display: flex; align-items:center; justify-content:center;
-      font-size: .75rem; font-weight: 600;
-    }
-    .msg.assistant .msg-avatar { background: var(--mint-dim); color: var(--mint); }
-    .msg.user .msg-avatar { background: rgba(96,165,250,.2); color: #60a5fa; }
-    .msg-body { flex: 1; min-width: 0; }
-    .msg-bubble {
-      padding: .85rem 1rem;
-      border-radius: 14px;
-      font-size: .88rem;
-      line-height: 1.65;
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
-    .msg.assistant .msg-bubble {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-top-left-radius: 4px;
-    }
-    .msg.user .msg-bubble {
-      background: var(--mint);
-      color: var(--navy3);
-      font-weight: 500;
-      border-top-right-radius: 4px;
-    }
-    .msg-time {
-      font-size: .68rem;
-      color: var(--w30);
-      margin-top: .3rem;
-      padding: 0 .25rem;
-    }
-    .msg.user .msg-time { text-align: right; }
+    /* SIDEBAR */
+    .sidebar { width:196px; flex-shrink:0; background:var(--sidebar); border-right:1px solid var(--border); display:flex; flex-direction:column; height:100vh; transition:background .2s,border-color .2s; }
+    .sidebar-brand { padding:1.1rem .9rem .9rem; border-bottom:1px solid var(--border); }
+    .brand-label { font-size:.57rem; font-weight:500; letter-spacing:.15em; text-transform:uppercase; color:var(--w30); margin-bottom:.55rem; }
+    .brand-row { display:flex; align-items:center; gap:.5rem; }
+    .brand-icon { width:26px; height:26px; border-radius:7px; background:var(--mint-dim); border:1px solid var(--mint-a20); display:flex; align-items:center; justify-content:center; color:var(--mint); font-size:.75rem; font-weight:700; flex-shrink:0; }
+    .brand-name { font-size:.9rem; font-weight:600; color:var(--w90); }
+    .brand-os { font-size:.6rem; color:var(--w30); letter-spacing:.08em; }
 
-    /* Typing cursor */
-    .cursor {
-      display: inline-block;
-      width: 2px; height: 14px;
-      background: var(--mint);
-      margin-left: 2px;
-      vertical-align: middle;
-      animation: blink .7s steps(1) infinite;
-    }
+    .sidebar-nav { padding:.65rem .55rem; flex:1; display:flex; flex-direction:column; gap:2px; }
+    .nav-btn { display:flex; align-items:center; gap:.55rem; width:100%; padding:.5rem .65rem; border-radius:8px; border:none; background:none; color:var(--w60); font-family:'Outfit',sans-serif; font-size:.8rem; font-weight:400; cursor:pointer; text-align:left; transition:all .15s; }
+    .nav-btn:hover { background:var(--w10); color:var(--w90); }
+    .nav-btn.active { background:var(--mint-dim); color:var(--mint); font-weight:500; }
+    .nav-btn svg { width:14px; height:14px; flex-shrink:0; opacity:.65; }
+    .nav-btn.active svg { opacity:1; }
+
+    .sidebar-footer { padding:.7rem .75rem .9rem; border-top:1px solid var(--border); }
+    .pasta-label { font-size:.53rem; letter-spacing:.18em; text-transform:uppercase; color:var(--w30); margin-bottom:.18rem; }
+    .pasta-name { font-size:.7rem; color:var(--w60); margin-bottom:.55rem; font-family:monospace; }
+    .server-btn { display:block; width:100%; padding:.4rem .5rem; border-radius:7px; border:1px solid var(--border); background:none; color:var(--w60); font-family:'Outfit',sans-serif; font-size:.7rem; cursor:pointer; text-align:center; transition:all .15s; margin-bottom:4px; }
+    .server-btn:hover { background:var(--w10); color:var(--w90); }
+
+    /* CLIENT MODAL */
+    .modal-overlay { position:fixed; inset:0; background:var(--overlay); backdrop-filter:blur(4px); z-index:100; display:flex; align-items:center; justify-content:center; }
+    .modal-overlay.hidden { display:none; }
+    .modal { background:var(--sidebar); border:1px solid var(--border); border-radius:16px; width:380px; max-width:90vw; padding:1.4rem 1.4rem 1.2rem; }
+    .modal-title { font-size:1rem; font-weight:600; margin-bottom:.25rem; }
+    .modal-sub { font-size:.78rem; color:var(--w60); margin-bottom:1rem; }
+    .client-list { display:flex; flex-direction:column; gap:.4rem; max-height:320px; overflow-y:auto; }
+    .client-list::-webkit-scrollbar { width:3px; }
+    .client-list::-webkit-scrollbar-thumb { background:var(--border); }
+    .client-item { display:flex; align-items:center; justify-content:space-between; padding:.7rem .85rem; border-radius:9px; background:var(--surface); border:1px solid var(--border); cursor:pointer; transition:all .15s; }
+    .client-item:hover { border-color:var(--mint-a25); background:var(--mint-a04); }
+    .client-item.active { border-color:var(--mint-a40); background:var(--mint-dim); }
+    .client-nome { font-size:.86rem; font-weight:500; }
+    .client-pasta { font-size:.68rem; color:var(--w30); font-family:monospace; margin-top:.1rem; }
+    .client-check { color:var(--mint); flex-shrink:0; }
+    .client-check svg { width:15px; height:15px; }
+    .modal-loading { color:var(--w30); font-size:.8rem; text-align:center; padding:.8rem 0; }
+    .modal-divider { display:flex; align-items:center; gap:.6rem; margin:.9rem 0 .7rem; }
+    .modal-divider::before,.modal-divider::after { content:''; flex:1; height:1px; background:var(--border); }
+    .modal-divider span { font-size:.62rem; color:var(--w30); letter-spacing:.1em; text-transform:uppercase; white-space:nowrap; }
+    .path-row { display:flex; gap:.5rem; }
+    .path-input { flex:1; background:var(--navy3); border:1px solid var(--border); border-radius:8px; padding:.52rem .75rem; color:var(--w90); font-family:monospace; font-size:.78rem; outline:none; transition:border-color .15s; }
+    .path-input:focus { border-color:var(--mint-a35); }
+    .path-input::placeholder { color:var(--w30); }
+    .path-btn { padding:.5rem .9rem; border-radius:8px; border:1px solid var(--mint-a30); background:var(--mint-dim); color:var(--mint); font-family:'Outfit',sans-serif; font-size:.78rem; font-weight:500; cursor:pointer; white-space:nowrap; transition:all .15s; }
+    .path-btn:hover { background:var(--mint-a20); }
+
+    /* MAIN */
+    .main { flex:1; height:100vh; overflow:hidden; position:relative; }
+    .page { display:none; height:100%; flex-direction:column; }
+    .page.active { display:flex; }
+
+    /* PAGE HEADER */
+    .page-header { padding:1.3rem 1.7rem .85rem; flex-shrink:0; }
+    .page-eyebrow { font-size:.57rem; letter-spacing:.2em; text-transform:uppercase; color:var(--w30); margin-bottom:.25rem; }
+    .page-title { font-size:1.55rem; font-weight:600; }
+    .page-sub { font-size:.8rem; color:var(--w60); margin-top:.15rem; }
+
+    /* GREETING (page hoje) */
+    .hoje-header { padding:1.5rem 1.7rem 1rem; }
+    .greeting-eyebrow { font-size:.52rem; letter-spacing:.28em; text-transform:uppercase; color:var(--mint); font-weight:600; margin-bottom:.7rem; opacity:.9; }
+    .greeting-block { display:flex; align-items:baseline; gap:.38rem; flex-wrap:wrap; line-height:1.1; margin-bottom:.38rem; }
+    .greeting-salut { font-family:'Outfit',sans-serif; font-size:1.5rem; font-weight:300; color:var(--w60); }
+    .greeting-name { font-family:'DM Serif Display',serif; font-size:1.85rem; color:var(--w90); font-style:normal; }
+    .greeting-date { font-size:.7rem; color:var(--w30); letter-spacing:.04em; }
+
+    /* HOJE */
+    .hoje-body { flex:1; overflow-y:auto; padding:0 1.7rem 1.7rem; display:grid; grid-template-columns:1fr 300px; grid-template-rows:auto auto; gap:.9rem; align-content:start; }
+    .hoje-body::-webkit-scrollbar { width:4px; }
+    .hoje-body::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
+
+    .card { background:var(--surface); border:1px solid var(--border); border-radius:13px; padding:1rem 1.1rem; transition:background .2s,border-color .2s; }
+    .card-label { font-size:.57rem; letter-spacing:.18em; text-transform:uppercase; color:var(--w30); margin-bottom:.45rem; }
+    .card-title { font-size:.92rem; font-weight:600; margin-bottom:.35rem; }
+    .card-text { font-size:.8rem; color:var(--w60); line-height:1.6; }
+
+    .counts-row { display:flex; gap:.75rem; margin-top:.75rem; }
+    .count-box { background:var(--navy3); border-radius:9px; padding:.55rem .85rem; min-width:72px; }
+    .count-num { font-size:1.3rem; font-weight:600; line-height:1; }
+    .count-lbl { font-size:.57rem; letter-spacing:.1em; text-transform:uppercase; color:var(--w30); margin-top:.18rem; }
+
+    #foco-card { grid-column:1; grid-row:1; }
+    .tom-card  { grid-column:1; grid-row:2; }
+    .acoes-card { grid-column:2; grid-row:1 / 3; }
+
+    .acoes-list { display:flex; flex-direction:column; gap:3px; margin-top:.2rem; }
+    .acao-item { display:flex; align-items:center; justify-content:space-between; padding:.55rem .7rem; border-radius:8px; background:var(--navy3); border:1px solid transparent; cursor:pointer; transition:all .15s; }
+    .acao-item:hover { background:var(--navy2); border-color:var(--border); }
+    .acao-label { font-size:.8rem; font-weight:500; }
+    .acao-sub { font-size:.67rem; color:var(--w30); margin-top:.08rem; }
+    .acao-chevron svg { width:12px; height:12px; color:var(--w30); }
+
+    /* CHAT */
+    .chat-topbar { padding:.8rem 1.5rem; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:.7rem; flex-shrink:0; }
+    .chat-topbar-title { font-size:.88rem; font-weight:600; flex:1; }
+    .chat-badge { font-size:.68rem; padding:.18rem .6rem; border-radius:20px; background:var(--mint-dim); color:var(--mint); font-weight:500; }
+    .new-chat-btn { display:flex; align-items:center; gap:.3rem; padding:.25rem .6rem; border-radius:7px; border:1px solid var(--border); background:none; color:var(--w60); font-family:'Outfit',sans-serif; font-size:.72rem; cursor:pointer; transition:all .15s; }
+    .new-chat-btn:hover { background:var(--w10); color:var(--w90); }
+    .new-chat-btn svg { width:12px; height:12px; }
+    .messages { flex:1; overflow-y:auto; padding:1.4rem; display:flex; flex-direction:column; gap:.9rem; scroll-behavior:smooth; }
+    .messages::-webkit-scrollbar { width:4px; }
+    .messages::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
+    .empty-state { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1.3rem; padding:2rem; text-align:center; }
+    .empty-icon { width:46px; height:46px; border-radius:13px; background:var(--mint-dim); display:flex; align-items:center; justify-content:center; color:var(--mint); }
+    .empty-icon svg { width:21px; height:21px; }
+    .empty-title { font-size:.95rem; font-weight:600; }
+    .empty-sub { font-size:.8rem; color:var(--w60); max-width:300px; line-height:1.6; }
+    .msg { display:flex; gap:.7rem; max-width:740px; }
+    .msg.user { flex-direction:row-reverse; margin-left:auto; }
+    .msg-avatar { width:29px; height:29px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:.68rem; font-weight:600; }
+    .msg.assistant .msg-avatar { background:var(--mint-dim); color:var(--mint); }
+    .msg.user .msg-avatar { background:var(--user-av-bg); color:var(--user-av-color); }
+    .msg-body { flex:1; min-width:0; }
+    .msg-bubble { padding:.78rem .92rem; border-radius:12px; font-size:.84rem; line-height:1.65; white-space:pre-wrap; word-break:break-word; }
+    .msg.assistant .msg-bubble { background:var(--surface); border:1px solid var(--border); border-top-left-radius:4px; }
+    .msg.user .msg-bubble { background:var(--mint); color:var(--mint-text); font-weight:500; border-top-right-radius:4px; }
+    .msg-time { font-size:.63rem; color:var(--w30); margin-top:.22rem; padding:0 .2rem; }
+    .msg.user .msg-time { text-align:right; }
+    .cursor { display:inline-block; width:2px; height:13px; background:var(--mint); margin-left:2px; vertical-align:middle; animation:blink .7s steps(1) infinite; }
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+    .tool-event { display:flex; align-items:center; gap:.45rem; font-size:.7rem; color:var(--w30); padding:.12rem 0; }
+    .tool-dot { width:4px; height:4px; border-radius:50%; background:var(--mint); flex-shrink:0; opacity:.6; }
+    .input-bar { padding:.8rem 1.5rem .95rem; border-top:1px solid var(--border); flex-shrink:0; }
+    .input-wrap { display:flex; align-items:flex-end; gap:.55rem; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:.52rem .55rem .52rem .9rem; transition:border-color .2s; }
+    .input-wrap:focus-within { border-color:var(--mint-a35); }
+    .input-wrap textarea { flex:1; background:none; border:none; outline:none; color:var(--w90); font-family:'Outfit',sans-serif; font-size:.86rem; resize:none; max-height:120px; min-height:21px; line-height:1.5; }
+    .input-wrap textarea::placeholder { color:var(--w30); }
+    .send-btn { width:32px; height:32px; border-radius:8px; background:var(--mint); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--navy3); flex-shrink:0; transition:all .2s; }
+    .send-btn:hover { background:#fff; }
+    .send-btn:disabled { background:var(--w10); color:var(--w30); cursor:not-allowed; }
+    .send-btn svg { width:14px; height:14px; }
+    .input-hint { font-size:.63rem; color:var(--w30); margin-top:.32rem; padding:0 .18rem; }
 
-    /* Tool events */
-    .tool-event {
-      display: flex;
-      align-items: center;
-      gap: .5rem;
-      font-size: .75rem;
-      color: var(--w30);
-      padding: .2rem 0;
-      font-family: 'Outfit', monospace;
-    }
-    .tool-dot {
-      width: 5px; height: 5px;
-      border-radius: 50%;
-      background: var(--mint);
-      flex-shrink: 0;
-      opacity: .6;
-    }
+    /* SKILLS */
+    .skills-body { flex:1; overflow-y:auto; padding:0 1.7rem 1.7rem; }
+    .skills-body::-webkit-scrollbar { width:4px; }
+    .skills-body::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
+    .skill-group { margin-bottom:1.4rem; }
+    .skill-group-label { font-size:.57rem; letter-spacing:.18em; text-transform:uppercase; color:var(--w30); margin-bottom:.55rem; }
+    .skills-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:.6rem; }
+    .skill-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:.9rem 1rem; cursor:pointer; transition:all .15s; display:flex; flex-direction:column; gap:.35rem; }
+    .skill-card:hover { border-color:var(--mint-a25); background:var(--mint-a04); }
+    .skill-card-tag { font-size:.56rem; letter-spacing:.15em; text-transform:uppercase; color:var(--mint); font-weight:500; }
+    .skill-card-title { font-size:.86rem; font-weight:600; }
+    .skill-card-desc { font-size:.74rem; color:var(--w60); line-height:1.5; flex:1; }
+    .skill-card-cmd { font-size:.66rem; color:var(--w30); font-family:monospace; }
+    .skill-card-run { margin-top:.45rem; padding:.32rem .65rem; border-radius:7px; border:1px solid var(--border); background:none; color:var(--w60); font-family:'Outfit',sans-serif; font-size:.7rem; cursor:pointer; transition:all .15s; align-self:flex-start; }
+    .skill-card-run:hover { background:var(--mint-dim); color:var(--mint); border-color:var(--mint-a30); }
 
-    /* Markdown-like formatting */
-    .msg-bubble strong { font-weight: 600; }
-    .msg-bubble em { font-style: italic; color: var(--w60); }
+    /* CONTENT PAGES */
+    .content-body { flex:1; overflow-y:auto; padding:0 1.7rem 1.7rem; }
+    .content-body::-webkit-scrollbar { width:4px; }
+    .content-body::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
+    .content-section { background:var(--surface); border:1px solid var(--border); border-radius:13px; padding:1.1rem 1.3rem; margin-bottom:.9rem; }
+    .content-section-title { font-size:.57rem; letter-spacing:.18em; text-transform:uppercase; color:var(--w30); margin-bottom:.75rem; }
+    .md-content { font-size:.82rem; line-height:1.7; color:var(--w60); }
+    .md-content h1,.md-content h2 { color:var(--w90); font-size:.92rem; margin:.75rem 0 .25rem; font-weight:600; }
+    .md-content h3 { color:var(--w90); font-size:.84rem; margin:.55rem 0 .2rem; font-weight:600; }
+    .md-content strong { color:var(--w90); font-weight:600; }
+    .loading-text { color:var(--w30); font-size:.8rem; padding:.8rem 0; }
 
-    /* ── INPUT BAR ── */
-    .input-bar {
-      padding: 1rem 1.5rem 1.2rem;
-      border-top: 1px solid var(--border);
-      flex-shrink: 0;
-    }
-    .input-wrap {
-      display: flex;
-      align-items: flex-end;
-      gap: .65rem;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: .6rem .65rem .6rem 1rem;
-      transition: border-color .2s;
-    }
-    .input-wrap:focus-within { border-color: rgba(78,203,163,.35); }
-    .input-wrap textarea {
-      flex: 1;
-      background: none;
-      border: none;
-      outline: none;
-      color: var(--w90);
-      font-family: 'Outfit', sans-serif;
-      font-size: .9rem;
-      resize: none;
-      max-height: 140px;
-      min-height: 24px;
-      line-height: 1.5;
-    }
-    .input-wrap textarea::placeholder { color: var(--w30); }
-    .send-btn {
-      width: 36px; height: 36px;
-      border-radius: 10px;
-      background: var(--mint);
-      border: none;
-      cursor: pointer;
-      display: flex; align-items:center; justify-content:center;
-      color: var(--navy3);
-      flex-shrink: 0;
-      transition: all .2s;
-    }
-    .send-btn:hover { background: #fff; }
-    .send-btn:disabled { background: var(--w10); color: var(--w30); cursor: not-allowed; }
-    .send-btn svg { width: 16px; height: 16px; }
-    .input-hint { font-size: .68rem; color: var(--w30); margin-top: .4rem; padding: 0 .25rem; }
+    /* BIBLIOTECA */
+    .biblioteca-body { flex:1; overflow-y:auto; padding:0 1.7rem 1.7rem; }
+    .biblioteca-body::-webkit-scrollbar { width:4px; }
+    .biblioteca-body::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
+    .biblioteca-empty { color:var(--w30); font-size:.82rem; text-align:center; padding:3rem 0; line-height:1.7; }
+    .biblioteca-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:.7rem; }
+    .bib-item { background:var(--surface); border:1px solid var(--border); border-radius:11px; overflow:hidden; cursor:pointer; transition:all .15s; }
+    .bib-item:hover { border-color:var(--mint-a25); }
+    .bib-thumb { width:100%; aspect-ratio:4/5; object-fit:cover; display:block; background:var(--navy3); }
+    .bib-placeholder { width:100%; aspect-ratio:4/5; background:var(--navy3); display:flex; align-items:center; justify-content:center; color:var(--w30); }
+    .bib-placeholder svg { width:26px; height:26px; }
+    .bib-iframe-wrap { width:100%; aspect-ratio:4/5; overflow:hidden; position:relative; background:var(--navy3); }
+    .bib-iframe { position:absolute; top:0; left:0; width:1080px; height:1350px; transform-origin:top left; pointer-events:none; border:none; }
+
+    /* BIBLIOTECA DETAIL MODAL — sempre dark */
+    .bib-detail-modal { background:#0d1f3e; border:1px solid rgba(255,255,255,.10); border-radius:16px; width:min(860px,92vw); max-height:88vh; display:flex; flex-direction:column; overflow:hidden; }
+    .bib-detail-header { display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:1rem 1.3rem; border-bottom:1px solid rgba(255,255,255,.10); flex-shrink:0; }
+    .bib-detail-name { font-size:.9rem; font-weight:600; color:rgba(255,255,255,.92); }
+    .bib-detail-btns { display:flex; align-items:center; gap:.45rem; flex-shrink:0; }
+    .bib-action-btn { display:flex; align-items:center; gap:.35rem; padding:.38rem .75rem; border-radius:8px; border:1px solid rgba(255,255,255,.14); background:none; color:rgba(255,255,255,.62); font-family:'Outfit',sans-serif; font-size:.74rem; cursor:pointer; text-decoration:none; transition:all .15s; white-space:nowrap; }
+    .bib-action-btn:hover { background:rgba(255,255,255,.08); color:rgba(255,255,255,.92); }
+    .bib-action-btn svg { width:13px; height:13px; flex-shrink:0; }
+    .bib-close-btn { width:28px; height:28px; border-radius:7px; border:1px solid rgba(255,255,255,.14); background:none; color:rgba(255,255,255,.62); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:.82rem; transition:all .15s; }
+    .bib-close-btn:hover { background:rgba(255,255,255,.08); color:rgba(255,255,255,.92); }
+    .bib-detail-body { flex:1; overflow-y:auto; padding:1.1rem 1.3rem; display:grid; grid-template-columns:repeat(auto-fill,minmax(170px,1fr)); gap:.75rem; align-content:start; }
+    .bib-detail-body::-webkit-scrollbar { width:4px; }
+    .bib-detail-body::-webkit-scrollbar-thumb { background:rgba(255,255,255,.12); border-radius:2px; }
+    .bib-slide-wrap { border-radius:9px; overflow:hidden; border:1px solid rgba(255,255,255,.10); cursor:pointer; transition:all .15s; position:relative; }
+    .bib-slide-wrap:hover { border-color:rgba(78,203,163,.4); transform:scale(1.02); }
+    .bib-slide-img { width:100%; aspect-ratio:4/5; object-fit:cover; display:block; }
+    .bib-slide-dl { position:absolute; bottom:.4rem; right:.4rem; background:rgba(0,0,0,.6); border-radius:6px; padding:.25rem .45rem; font-size:.62rem; color:#fff; opacity:0; transition:opacity .15s; text-decoration:none; }
+    .bib-slide-wrap:hover .bib-slide-dl { opacity:1; }
+    .bib-detail-empty { color:rgba(255,255,255,.30); font-size:.82rem; text-align:center; padding:2rem 0; grid-column:1/-1; }
+    .bib-info { padding:.45rem .6rem; }
+    .bib-name { font-size:.68rem; color:var(--w60); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .bib-type { font-size:.57rem; color:var(--w30); margin-top:.08rem; text-transform:uppercase; letter-spacing:.08em; }
   </style>
 </head>
 <body>
 
-<!-- SIDEBAR -->
 <aside class="sidebar">
-  <div class="sidebar-brand">
-    <div class="brand-label">IA da empresa</div>
-    <div class="brand-name" id="empresaNome">Carregando…</div>
+  <div class="sidebar-brand" onclick="openClientModal()" style="cursor:pointer" title="Trocar cliente">
+    <div class="brand-row">
+      <div class="brand-icon" id="brandIcon">E</div>
+      <div>
+        <div class="brand-name" id="empresaNome">Espaço Vitta</div>
+        <div class="brand-os">OS*</div>
+      </div>
+    </div>
   </div>
 
-  <div class="sidebar-section">
-    <div class="section-label">Skills</div>
-
-    <button class="skill-btn active" id="btn-chat" onclick="setSkill('chat', this)">
-      <span class="skill-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
-        </svg>
-      </span>
-      Chat livre
+  <nav class="sidebar-nav">
+    <button class="nav-btn active" id="nav-hoje" onclick="navigate('hoje')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      Hoje
     </button>
-
-    <button class="skill-btn" id="btn-carrossel" onclick="setSkill('carrossel', this)">
-      <span class="skill-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
-          <rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
-        </svg>
-      </span>
-      Carrossel
+    <button class="nav-btn" id="nav-chat" onclick="navigate('chat')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+      Chat
     </button>
-
-    <button class="skill-btn" id="btn-legenda" onclick="setSkill('legenda', this)">
-      <span class="skill-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="17" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/>
-          <line x1="21" y1="14" x2="3" y2="14"/><line x1="17" y1="18" x2="3" y2="18"/>
-        </svg>
-      </span>
-      Legenda
+    <button class="nav-btn" id="nav-skills" onclick="navigate('skills')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      Skills
     </button>
-
-    <button class="skill-btn" id="btn-proposta" onclick="setSkill('proposta', this)">
-      <span class="skill-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
-          <polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/>
-          <line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
-        </svg>
-      </span>
-      Proposta
+    <button class="nav-btn" id="nav-negocio" onclick="navigate('negocio')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
+      Negócio
     </button>
-
-    <button class="skill-btn" id="btn-resposta" onclick="setSkill('resposta', this)">
-      <span class="skill-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="9 17 4 12 9 7"/><path d="M20 18v-2a4 4 0 00-4-4H4"/>
-        </svg>
-      </span>
-      Resposta cliente
+    <button class="nav-btn" id="nav-identidade" onclick="navigate('identidade')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+      Identidade
     </button>
-
-    <button class="skill-btn" id="btn-pauta" onclick="setSkill('pauta', this)">
-      <span class="skill-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/>
-          <line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
-        </svg>
-      </span>
-      Pauta de conteúdo
+    <button class="nav-btn" id="nav-biblioteca" onclick="navigate('biblioteca')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      Biblioteca
     </button>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="pasta-label">Pasta</div>
+    <div class="pasta-name" id="pastaNome">Espaço Vitta</div>
+    <button class="server-btn theme-btn" id="themeBtn" onclick="toggleTheme()">☀️ Tema claro</button>
+    <button class="server-btn" onclick="fetch('/api/restart',{method:'POST'})">Reiniciar servidor</button>
+    <button class="server-btn" onclick="window.close()">Fechar painel</button>
   </div>
-
-  <button class="new-chat-btn" onclick="newChat()">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-      <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-    </svg>
-    Nova conversa
-  </button>
 </aside>
 
-<!-- MAIN -->
-<div class="main">
-  <header class="topbar">
-    <span class="topbar-title" id="topbarTitle">Chat livre</span>
-    <span class="topbar-badge">Claude Sonnet</span>
-  </header>
-
-  <div class="messages" id="messages">
-    <!-- Empty state shown initially -->
-    <div class="empty-state" id="emptyState">
-      <div class="empty-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"/>
-          <path d="M12 8v4l3 3"/>
-        </svg>
-      </div>
-      <div class="empty-title">O que você precisa hoje?</div>
-      <div class="empty-sub">Use as skills no menu ou comece uma conversa livre. A IA já conhece o seu negócio.</div>
-      <div class="quick-actions">
-        <div class="quick-card" onclick="startSkill('carrossel')">
-          <div class="quick-card-label">Carrossel</div>
-          <div class="quick-card-desc">Criar conteúdo para o Instagram com a voz do negócio</div>
-        </div>
-        <div class="quick-card" onclick="startSkill('legenda')">
-          <div class="quick-card-label">Legenda</div>
-          <div class="quick-card-desc">Escrever legenda para um post pronto para publicar</div>
-        </div>
-        <div class="quick-card" onclick="startSkill('proposta')">
-          <div class="quick-card-label">Proposta</div>
-          <div class="quick-card-desc">Gerar proposta comercial personalizada para um cliente</div>
-        </div>
-        <div class="quick-card" onclick="startSkill('resposta')">
-          <div class="quick-card-label">Resposta ao cliente</div>
-          <div class="quick-card-desc">Responder mensagem no tom certo e de forma profissional</div>
-        </div>
-      </div>
+<!-- CLIENT SELECTOR MODAL -->
+<div class="modal-overlay hidden" id="clientModal" onclick="closeClientModal(event)">
+  <div class="modal">
+    <div class="modal-title">Selecionar cliente</div>
+    <div class="modal-sub">Clique em uma pasta para carregar o OS daquele cliente.</div>
+    <div class="client-list" id="clientList">
+      <div class="modal-loading">Buscando pastas…</div>
     </div>
-  </div>
-
-  <div class="input-bar">
-    <div class="input-wrap">
-      <textarea
-        id="inputMsg"
-        placeholder="Digite sua mensagem…"
-        rows="1"
-        onkeydown="handleKey(event)"
-        oninput="autoResize(this)"
-      ></textarea>
-      <button class="send-btn" id="sendBtn" onclick="sendMessage()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
-        </svg>
+    <div class="modal-divider"><span>ou informe o caminho</span></div>
+    <div class="path-row">
+      <button class="path-btn" onclick="browseFolder()" id="browseBtn" style="flex-shrink:0">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;margin-right:4px;vertical-align:middle"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
+        Browse
       </button>
+      <input class="path-input" id="pathInput" placeholder="C:\Users\...\nome-do-cliente" onkeydown="if(event.key==='Enter')selectByPath()">
+      <button class="path-btn" onclick="selectByPath()">Carregar</button>
     </div>
-    <div class="input-hint">Enter para enviar · Shift+Enter para nova linha</div>
   </div>
 </div>
 
-<script>
-  const SKILLS = {
-    chat:      { label: 'Chat livre',         prompt: null },
-    carrossel: { label: 'Carrossel',          prompt: 'Quero criar um carrossel para o Instagram. Me faça as perguntas necessárias para começar.' },
-    legenda:   { label: 'Legenda',            prompt: 'Preciso de uma legenda para um post. Me faça as perguntas para gerar.' },
-    proposta:  { label: 'Proposta',           prompt: 'Preciso gerar uma proposta comercial. Me faça as perguntas necessárias.' },
-    resposta:  { label: 'Resposta ao cliente',prompt: 'Preciso responder uma mensagem de cliente. Qual é a mensagem que você recebeu?' },
-    pauta:     { label: 'Pauta de conteúdo',  prompt: 'Quero montar a pauta de conteúdo do mês. Me faça as perguntas para começar.' },
-  };
+<!-- BIBLIOTECA DETAIL MODAL -->
+<div class="modal-overlay hidden" id="bibModal" onclick="closeBibModal(event)">
+  <div class="bib-detail-modal">
+    <div class="bib-detail-header">
+      <div class="bib-detail-name" id="bibDetailName"></div>
+      <div class="bib-detail-btns">
+        <a class="bib-action-btn" id="bibDownloadBtn" href="#" download>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Baixar HTML
+        </a>
+        <button class="bib-action-btn" onclick="bibOpenFolder()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
+          Abrir pasta
+        </button>
+        <button class="bib-action-btn" onclick="window.open(currentBibItem.path,'_blank')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Abrir
+        </button>
+        <button class="bib-close-btn" onclick="document.getElementById('bibModal').classList.add('hidden')">✕</button>
+      </div>
+    </div>
+    <div class="bib-detail-body" id="bibDetailBody"></div>
+  </div>
+</div>
 
-  let messages = [];
-  let currentSkill = 'chat';
-  let streaming = false;
+<main class="main">
 
-  // Load company info
-  fetch('/api/info')
-    .then(r => r.json())
-    .then(d => { document.getElementById('empresaNome').textContent = d.nome || 'Minha Empresa'; })
-    .catch(() => {});
+  <!-- HOJE -->
+  <div id="page-hoje" class="page active">
+    <div class="page-header hoje-header">
+      <div class="greeting-eyebrow" id="hoje-eyebrow">ESPAÇO VITTA</div>
+      <div class="greeting-block">
+        <span class="greeting-salut" id="greetingTime">Boa noite,</span>
+        <span class="greeting-name" id="greetingName">Pedro.</span>
+      </div>
+      <div class="greeting-date" id="greetingDate"></div>
+    </div>
+    <div class="hoje-body">
+      <div class="card" id="foco-card">
+        <div class="card-label">Foco atual</div>
+        <div class="card-title" id="foco-titulo">Carregando…</div>
+        <div class="card-text" id="foco-texto"></div>
+        <div class="counts-row">
+          <div class="count-box">
+            <div class="count-num" id="skills-count">—</div>
+            <div class="count-lbl">Skills</div>
+          </div>
+          <div class="count-box">
+            <div class="count-num" id="conteudo-count">—</div>
+            <div class="count-lbl">Conteúdos</div>
+          </div>
+        </div>
+      </div>
 
-  function setSkill(skill, btn) {
-    currentSkill = skill;
-    document.querySelectorAll('.skill-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    document.getElementById('topbarTitle').textContent = SKILLS[skill].label;
-  }
+      <div class="card acoes-card">
+        <div class="card-label">Ações rápidas</div>
+        <div class="acoes-list" id="acoes-list"></div>
+      </div>
 
-  function startSkill(skill) {
-    const btn = document.getElementById('btn-' + skill);
-    if (btn) setSkill(skill, btn);
-    const prompt = SKILLS[skill]?.prompt;
-    if (prompt) {
-      document.getElementById('inputMsg').value = prompt;
-      sendMessage();
-    }
-  }
+      <div class="card tom-card">
+        <div class="card-label">Tom de voz</div>
+        <div class="card-text" id="tom-texto">Carregando…</div>
+      </div>
+    </div>
+  </div>
 
-  function newChat() {
-    messages = [];
-    const container = document.getElementById('messages');
-    container.innerHTML = `
+  <!-- CHAT -->
+  <div id="page-chat" class="page">
+    <header class="chat-topbar">
+      <span class="chat-topbar-title" id="chatTitle">Chat livre</span>
+      <button class="new-chat-btn" onclick="newChat()" title="Nova conversa">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Nova
+      </button>
+      <span class="chat-badge">Claude Sonnet</span>
+    </header>
+    <div class="messages" id="messages">
       <div class="empty-state" id="emptyState">
         <div class="empty-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>
-          </svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
         </div>
         <div class="empty-title">O que você precisa hoje?</div>
-        <div class="empty-sub">Use as skills no menu ou comece uma conversa livre. A IA já conhece o seu negócio.</div>
-        <div class="quick-actions">
-          <div class="quick-card" onclick="startSkill('carrossel')">
-            <div class="quick-card-label">Carrossel</div>
-            <div class="quick-card-desc">Criar conteúdo para o Instagram com a voz do negócio</div>
-          </div>
-          <div class="quick-card" onclick="startSkill('legenda')">
-            <div class="quick-card-label">Legenda</div>
-            <div class="quick-card-desc">Escrever legenda para um post pronto para publicar</div>
-          </div>
-          <div class="quick-card" onclick="startSkill('proposta')">
-            <div class="quick-card-label">Proposta</div>
-            <div class="quick-card-desc">Gerar proposta comercial personalizada para um cliente</div>
-          </div>
-          <div class="quick-card" onclick="startSkill('resposta')">
-            <div class="quick-card-label">Resposta ao cliente</div>
-            <div class="quick-card-desc">Responder mensagem no tom certo e de forma profissional</div>
-          </div>
-        </div>
-      </div>`;
+        <div class="empty-sub">Selecione uma skill ou comece uma conversa livre.</div>
+      </div>
+    </div>
+    <div class="input-bar">
+      <div class="input-wrap">
+        <textarea id="inputMsg" placeholder="Digite sua mensagem…" rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+        <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+      <div class="input-hint">Enter para enviar · Shift+Enter para nova linha</div>
+    </div>
+  </div>
+
+  <!-- SKILLS -->
+  <div id="page-skills" class="page">
+    <div class="page-header">
+      <div class="page-eyebrow">COMANDOS DO SISTEMA</div>
+      <div class="page-title">Skills</div>
+      <div class="page-sub">Cada skill é uma rotina pronta. Clique para executar no chat.</div>
+    </div>
+    <div class="skills-body" id="skills-body"></div>
+  </div>
+
+  <!-- NEGÓCIO -->
+  <div id="page-negocio" class="page">
+    <div class="page-header">
+      <div class="page-eyebrow">CONTEXTO</div>
+      <div class="page-title">Negócio</div>
+    </div>
+    <div class="content-body" id="negocio-body"><div class="loading-text">Carregando…</div></div>
+  </div>
+
+  <!-- IDENTIDADE -->
+  <div id="page-identidade" class="page">
+    <div class="page-header">
+      <div class="page-eyebrow">MARCA</div>
+      <div class="page-title">Identidade</div>
+    </div>
+    <div class="content-body" id="identidade-body"><div class="loading-text">Carregando…</div></div>
+  </div>
+
+  <!-- BIBLIOTECA -->
+  <div id="page-biblioteca" class="page">
+    <div class="page-header">
+      <div class="page-eyebrow">CONTEÚDO PRODUZIDO</div>
+      <div class="page-title">Biblioteca</div>
+      <div class="page-sub">Criações visuais salvas para reutilização.</div>
+    </div>
+    <div class="biblioteca-body" id="biblioteca-body"><div class="loading-text">Carregando…</div></div>
+  </div>
+
+</main>
+
+<script>
+const SKILL_GROUPS = [
+  { label: 'Sistema', skills: [
+    { id:'instalar',       label:'Instalar',        desc:'Configura o sistema pela primeira vez com as informações do negócio', cmd:'/instalar',       prompt:'Execute o /instalar para configurar o sistema.' },
+    { id:'abrir',          label:'Abrir sessão',     desc:'Carrega a memória do negócio e devolve um resumo do que importa hoje', cmd:'/abrir',          prompt:'Execute o /abrir e me dê um resumo da sessão.' },
+    { id:'salvar',         label:'Salvar no GitHub', desc:'Commit + push de tudo que mudou. Backup do trabalho.', cmd:'/salvar',         prompt:'Execute o /salvar para salvar no GitHub.' },
+    { id:'atualizar',      label:'Atualizar memória',desc:'Varre o projeto e reconcilia a memória com o que mudou na operação', cmd:'/atualizar',      prompt:'Execute o /atualizar para atualizar a memória.' },
+    { id:'diagnostico',    label:'Diagnóstico',      desc:'Mapeia gargalos operacionais e oportunidades de crescimento', cmd:'/diagnostico',    prompt:'Execute o /diagnostico.' },
+    { id:'mapear-rotinas', label:'Mapear rotinas',   desc:'Descobre o que você repete e transforma em skill nova', cmd:'/mapear-rotinas', prompt:'Execute o /mapear-rotinas.' },
+  ]},
+  { label: 'Conteúdo', skills: [
+    { id:'carrossel',      label:'Criar carrossel',  desc:'Carrossel 1080×1350px com a identidade da marca inclusa', cmd:'/carrossel',      prompt:'Quero criar um carrossel para o Instagram. Me faça as perguntas necessárias para começar.' },
+    { id:'post',           label:'Publicar tema',    desc:'Tema + artigo de blog + carrossel + 3 legendas, tudo amarrado', cmd:'/post',           prompt:'Quero publicar um tema completo. Me faça as perguntas para começar.' },
+    { id:'story',          label:'Story',            desc:'Roteiro de story único ou sequência de stories', cmd:'/story',          prompt:'Quero criar stories. Me faça as perguntas necessárias.' },
+    { id:'legenda',        label:'Legenda',          desc:'Legenda para qualquer post pronto para publicar', cmd:'/legenda',        prompt:'Preciso de uma legenda para um post. Me faça as perguntas.' },
+    { id:'pauta-conteudo', label:'Pauta de conteúdo',desc:'Pauta mensal com temas, formatos e datas', cmd:'/pauta-conteudo', prompt:'Quero montar a pauta de conteúdo. Me faça as perguntas para começar.' },
+  ]},
+  { label: 'Negócio', skills: [
+    { id:'proposta',          label:'Proposta',         desc:'Proposta comercial personalizada para um cliente', cmd:'/proposta',          prompt:'Preciso gerar uma proposta comercial. Me faça as perguntas necessárias.' },
+    { id:'resposta-cliente',  label:'Resposta cliente', desc:'Resposta para mensagem de cliente no tom certo', cmd:'/resposta-cliente',  prompt:'Preciso responder uma mensagem de cliente. Qual é a mensagem?' },
+    { id:'gerar-site',        label:'Gerar site',       desc:'Cria ou atualiza o site de conversão', cmd:'/gerar-site',        prompt:'Execute o /gerar-site.' },
+    { id:'gerar-link-page',   label:'Gerar link page',  desc:'Cria ou atualiza a link page da bio do Instagram', cmd:'/gerar-link-page',   prompt:'Execute o /gerar-link-page.' },
+  ]},
+];
+
+const ACOES = [
+  { label:'Abrir sessão',    sub:'Resumo do contexto atual',         id:'abrir' },
+  { label:'Criar carrossel', sub:'Conteúdo visual para Instagram',   id:'carrossel' },
+  { label:'Publicar tema',   sub:'Tema + carrossel + legendas',      id:'post' },
+  { label:'Legenda',         sub:'Para post pronto publicar',        id:'legenda' },
+  { label:'Pauta do mês',    sub:'Calendário de conteúdo',           id:'pauta-conteudo' },
+  { label:'Salvar tudo',     sub:'Commit + push no GitHub',          id:'salvar' },
+];
+
+let sessionId = crypto.randomUUID();
+let currentSkill = 'chat';
+let streaming = false;
+const loaded = {};
+
+// ── ROUTING ──
+function navigate(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  document.getElementById('nav-' + page).classList.add('active');
+  if (!loaded[page]) {
+    loaded[page] = true;
+    if (page === 'negocio')    loadPagina('negocio');
+    if (page === 'identidade') loadPagina('identidade');
+    if (page === 'biblioteca') loadBiblioteca();
   }
+}
 
-  function handleKey(e) {
-    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+// ── HOJE ──
+function renderAcoes() {
+  document.getElementById('acoes-list').innerHTML = ACOES.map(a => `
+    <div class="acao-item" onclick="launchById('${a.id}')">
+      <div>
+        <div class="acao-label">${a.label}</div>
+        <div class="acao-sub">${a.sub}</div>
+      </div>
+      <div class="acao-chevron">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+    </div>`).join('');
+}
+
+async function loadHoje() {
+  try {
+    const d = await fetch('/api/hoje').then(r => r.json());
+    const lines = s => (s || '').split('\n').filter(l => l.trim() && !l.startsWith('#') && !l.startsWith('---'));
+    const strip = s => s.replace(/\*+/g,'').replace(/^[-•]\s*/,'').trim();
+
+    const estLines = lines(d.estrategia);
+    document.getElementById('foco-titulo').textContent = estLines[0] ? strip(estLines[0]) : 'Configure o sistema';
+    document.getElementById('foco-texto').textContent = estLines.slice(1,3).map(strip).join(' ') || 'Execute /instalar para começar.';
+
+    const prefLines = lines(d.preferencias);
+    document.getElementById('tom-texto').textContent = prefLines[0] ? strip(prefLines[0]) : '—';
+
+    document.getElementById('skills-count').textContent = d.skills_count ?? '—';
+    document.getElementById('conteudo-count').textContent = d.conteudo_count ?? '0';
+  } catch {
+    document.getElementById('foco-titulo').textContent = 'Servidor offline';
+    document.getElementById('foco-texto').textContent = '';
   }
+}
 
-  function autoResize(el) {
-    el.style.height = 'auto';
-    el.style.height = Math.min(el.scrollHeight, 140) + 'px';
+// ── SKILLS ──
+function esc(s) { return s.replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
+
+function renderSkills() {
+  document.getElementById('skills-body').innerHTML = SKILL_GROUPS.map(g => `
+    <div class="skill-group">
+      <div class="skill-group-label">${g.label}</div>
+      <div class="skills-grid">
+        ${g.skills.map(s => `
+          <div class="skill-card" onclick="launch('${esc(s.id)}','${esc(s.prompt)}','${esc(s.label)}')">
+            <div class="skill-card-tag">${g.label}</div>
+            <div class="skill-card-title">${s.label}</div>
+            <div class="skill-card-desc">${s.desc}</div>
+            <div class="skill-card-cmd">${s.cmd}</div>
+            <button class="skill-card-run" onclick="event.stopPropagation();launch('${esc(s.id)}','${esc(s.prompt)}','${esc(s.label)}')">Executar no chat</button>
+          </div>`).join('')}
+      </div>
+    </div>`).join('');
+}
+
+function launch(id, prompt, label) {
+  currentSkill = id;
+  document.getElementById('chatTitle').textContent = label;
+  navigate('chat');
+  document.getElementById('inputMsg').value = prompt;
+  sendMessage();
+}
+
+function launchById(id) {
+  for (const g of SKILL_GROUPS) {
+    const s = g.skills.find(x => x.id === id);
+    if (s) { launch(s.id, s.prompt, s.label); return; }
   }
+}
 
-  function now() {
-    return new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+// ── CONTENT PAGES ──
+function renderMd(text) {
+  if (!text || !text.trim()) return '<span style="color:var(--w30)">Arquivo não configurado. Execute /instalar para preencher.</span>';
+  return text
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/^### (.+)$/gm,'<h3>$1</h3>')
+    .replace(/^## (.+)$/gm,'<h2>$1</h2>')
+    .replace(/^# (.+)$/gm,'<h1>$1</h1>')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/^---+$/gm,'<hr style="border:none;border-top:1px solid var(--border);margin:.6rem 0">')
+    .replace(/^[-•] (.+)$/gm,'<div style="padding:.1rem 0">• $1</div>')
+    .replace(/\n/g,'<br>');
+}
+
+async function loadPagina(nome) {
+  const body = document.getElementById(nome + '-body');
+  try {
+    const d = await fetch('/api/pagina/' + nome).then(r => r.json());
+    const map = {
+      negocio:    [['empresa','Empresa'], ['estrategia','Estratégia']],
+      identidade: [['design-guide','Guia de Design'], ['preferencias','Tom de Voz e Preferências']],
+    };
+    body.innerHTML = (map[nome] || []).map(([key, title]) => `
+      <div class="content-section">
+        <div class="content-section-title">${title}</div>
+        <div class="md-content">${renderMd(d[key])}</div>
+      </div>`).join('');
+  } catch {
+    body.innerHTML = '<div class="loading-text">Erro ao carregar. Servidor offline?</div>';
   }
+}
 
-  function addMessage(role, text) {
-    const empty = document.getElementById('emptyState');
-    if (empty) empty.remove();
+// ── BIBLIOTECA ──
+const bibItems = {};
+let currentBibItem = null;
 
-    const container = document.getElementById('messages');
-    const initials = role === 'user' ? 'VC' : 'IA';
-    const div = document.createElement('div');
-    div.className = `msg ${role}`;
-    div.innerHTML = `
-      <div class="msg-avatar">${initials}</div>
-      <div class="msg-body">
-        <div class="msg-bubble" id="bubble-${Date.now()}">${escapeHtml(text)}</div>
-        <div class="msg-time">${now()}</div>
-      </div>`;
-    container.appendChild(div);
-    container.scrollTop = container.scrollHeight;
-    return div.querySelector('.msg-bubble');
-  }
+function scaleBibIframes() {
+  document.querySelectorAll('.bib-iframe-wrap').forEach(wrap => {
+    const iframe = wrap.querySelector('.bib-iframe');
+    if (!iframe) return;
+    iframe.style.transform = `scale(${wrap.clientWidth / 1080})`;
+  });
+}
 
-  function escapeHtml(s) {
-    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  }
+async function loadBiblioteca() {
+  const body = document.getElementById('biblioteca-body');
+  try {
+    const raw = await fetch('/api/biblioteca').then(r => r.json());
 
-  function formatText(s) {
-    return s
-      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\*(.+?)\*/g, '<em>$1</em>')
-      .replace(/\n/g, '<br>');
-  }
+    // Normaliza resposta do servidor (novo ou antigo formato)
+    const htmlItems = [];
+    const imageMap = {}; // stem → [paths]
 
-  function toolLabel(event) {
-    const labels = { Read:'Lendo', Write:'Escrevendo', Edit:'Editando', Bash:'Executando', Glob:'Buscando', Grep:'Pesquisando' };
-    const verb = labels[event.name] || event.name;
-    const detail = event.path ? event.path.split('/').slice(-2).join('/') : (event.command || '');
-    return `${verb}${detail ? ' ' + detail : ''}`;
-  }
-
-  async function sendMessage() {
-    if (streaming) return;
-    const input = document.getElementById('inputMsg');
-    const text = input.value.trim();
-    if (!text) return;
-
-    input.value = '';
-    input.style.height = 'auto';
-    document.getElementById('sendBtn').disabled = true;
-    streaming = true;
-
-    messages.push({ role: 'user', content: text });
-    addMessage('user', text);
-
-    const bubble = addMessage('assistant', '');
-    bubble.innerHTML = '<span class="cursor"></span>';
-
-    let fullText = '';
-    const container = document.getElementById('messages');
-
-    try {
-      const res = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          message: text,
-          skill: currentSkill,
-          history: messages
-        })
-      });
-
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder();
-      let buffer = '';
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-
-        buffer += decoder.decode(value, { stream: true });
-        const lines = buffer.split('\n');
-        buffer = lines.pop();
-
-        for (const line of lines) {
-          if (!line.startsWith('data: ')) continue;
-          const data = line.slice(6).trim();
-          if (data === '[DONE]') break;
-          try {
-            const ev = JSON.parse(data);
-            if (ev.type === 'text') {
-              fullText += ev.text;
-              bubble.innerHTML = formatText(escapeHtml(fullText)) + '<span class="cursor"></span>';
-            } else if (ev.type === 'tool') {
-              const toolEl = document.createElement('div');
-              toolEl.className = 'tool-event';
-              toolEl.innerHTML = `<span class="tool-dot"></span>${toolLabel(ev)}`;
-              bubble.parentElement.insertBefore(toolEl, bubble);
-            } else if (ev.type === 'error') {
-              fullText += `\n\nErro: ${ev.message}`;
-            }
-          } catch {}
-        }
-        container.scrollTop = container.scrollHeight;
+    raw.forEach(item => {
+      // Novo formato: tem campo 'file'
+      if (item.file) {
+        htmlItems.push(item);
+        return;
       }
-    } catch (err) {
-      fullText = 'Erro de conexão. Verifique se o servidor está rodando.';
+      // Antigo formato
+      const type = (item.type || '').toLowerCase();
+      if (type === 'html') {
+        const stem = item.name.replace(/\.html$/i, '');
+        htmlItems.push({ name: stem, file: item.name, path: item.path, folder: item.folder || '', related: [], has_images: false, _old: true });
+      } else if (['jpg','jpeg','png','webp'].includes(type)) {
+        // guarda imagens soltas para associar depois
+        const stem = item.name.replace(/\.[^.]+$/, '');
+        if (!imageMap[stem]) imageMap[stem] = [];
+        imageMap[stem].push(item.path);
+      }
+      // tipo '' (pasta) e 'md' são ignorados
+    });
+
+    // Associa imagens soltas a HTMLs do formato antigo
+    htmlItems.forEach(item => {
+      if (item._old && (!item.related || !item.related.length)) {
+        const imgs = imageMap[item.name] || [];
+        item.related = imgs;
+        item.has_images = imgs.length > 0;
+      }
+    });
+
+    if (!htmlItems.length) {
+      body.innerHTML = '<div class="biblioteca-empty">Nenhuma criação salva ainda.<br>Execute /carrossel para começar.</div>';
+      return;
     }
 
-    bubble.innerHTML = formatText(escapeHtml(fullText));
-    messages.push({ role: 'assistant', content: fullText });
-
-    streaming = false;
-    document.getElementById('sendBtn').disabled = false;
-    document.getElementById('inputMsg').focus();
+    htmlItems.forEach(item => { bibItems[item.path] = item; });
+    body.innerHTML = '<div class="biblioteca-grid">' + htmlItems.map(item => {
+      const thumb = `<div class="bib-iframe-wrap"><iframe class="bib-iframe" src="${item.path}" loading="lazy" sandbox="allow-scripts allow-same-origin"></iframe></div>`;
+      return `<div class="bib-item" onclick="openBibDetail('${item.path}')">${thumb}<div class="bib-info"><div class="bib-name">${item.name}</div><div class="bib-type">HTML</div></div></div>`;
+    }).join('') + '</div>';
+    requestAnimationFrame(scaleBibIframes);
+  } catch {
+    body.innerHTML = '<div class="loading-text">Erro ao carregar biblioteca.</div>';
   }
+}
+
+async function openBibDetail(path) {
+  currentBibItem = bibItems[path];
+  if (!currentBibItem) return;
+
+  document.getElementById('bibDetailName').textContent = currentBibItem.name;
+  const dlBtn = document.getElementById('bibDownloadBtn');
+  dlBtn.href = currentBibItem.path;
+  dlBtn.download = currentBibItem.file || (currentBibItem.name + '.html');
+
+  const body = document.getElementById('bibDetailBody');
+  body.innerHTML = '<div style="color:rgba(255,255,255,.3);font-size:.8rem;padding:2rem;grid-column:1/-1;text-align:center">Carregando imagens…</div>';
+  document.getElementById('bibModal').classList.remove('hidden');
+
+  try {
+    const images = await fetch(`/api/biblioteca/${encodeURIComponent(currentBibItem.name)}/images`).then(r => r.json());
+    if (images.length) {
+      body.innerHTML = images.map(src => `
+        <div class="bib-slide-wrap">
+          <img class="bib-slide-img" src="${src}" loading="lazy">
+          <a class="bib-slide-dl" href="${src}" download>↓ baixar</a>
+        </div>`).join('');
+    } else {
+      body.innerHTML = `
+        <div class="bib-detail-empty" style="display:flex;flex-direction:column;align-items:center;gap:.9rem;padding:2.5rem 1rem;grid-column:1/-1">
+          <div style="font-size:.85rem;color:rgba(255,255,255,.50);line-height:1.6;text-align:center">Nenhuma imagem exportada ainda.<br>Gere os JPEGs para usar nas redes sociais.</div>
+          <button class="bib-action-btn" style="border-color:rgba(78,203,163,.4);color:#4ECBA3" onclick="gerarJpegs()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+            Gerar JPEGs
+          </button>
+        </div>`;
+    }
+  } catch {
+    body.innerHTML = '<div style="color:rgba(255,255,255,.3);font-size:.8rem;padding:2rem;grid-column:1/-1;text-align:center">Erro ao carregar imagens.</div>';
+  }
+}
+
+function gerarJpegs() {
+  document.getElementById('bibModal').classList.add('hidden');
+  const prompt = `Gere os JPEGs do conteúdo "${currentBibItem ? currentBibItem.name : ''}" usando Playwright — capture cada slide e salve na pasta de mesmo nome em outputs/conteudo.`;
+  document.getElementById('inputMsg').value = prompt;
+  navigate('chat');
+  sendMessage();
+}
+
+function closeBibModal(e) {
+  if (e.target === document.getElementById('bibModal')) {
+    document.getElementById('bibModal').classList.add('hidden');
+  }
+}
+
+function bibOpenFolder() {
+  if (!currentBibItem) return;
+  fetch('/api/open-folder', {
+    method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ stem: currentBibItem.name })
+  });
+}
+
+// ── CHAT ──
+function newChat() {
+  if (streaming) return;
+  sessionId = crypto.randomUUID();
+  currentSkill = 'chat';
+  document.getElementById('chatTitle').textContent = 'Chat livre';
+  document.getElementById('messages').innerHTML = `
+    <div class="empty-state" id="emptyState">
+      <div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>
+      <div class="empty-title">O que você precisa hoje?</div>
+      <div class="empty-sub">Selecione uma skill ou comece uma conversa livre.</div>
+    </div>`;
+}
+
+function handleKey(e) { if (e.key==='Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }
+function autoResize(el) { el.style.height='auto'; el.style.height=Math.min(el.scrollHeight,120)+'px'; }
+function now() { return new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); }
+function html(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function fmt(s) { return html(s).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>').replace(/\n/g,'<br>'); }
+
+function addMsg(role, text) {
+  const empty = document.getElementById('emptyState');
+  if (empty) empty.remove();
+  const c = document.getElementById('messages');
+  const d = document.createElement('div');
+  d.className = 'msg ' + role;
+  const content = role === 'user' ? html(text) : fmt(text);
+  d.innerHTML = `<div class="msg-avatar">${role==='user'?'VC':'IA'}</div><div class="msg-body"><div class="msg-bubble" id="b${Date.now()}">${content}</div><div class="msg-time">${now()}</div></div>`;
+  c.appendChild(d);
+  c.scrollTop = c.scrollHeight;
+  return d.querySelector('.msg-bubble');
+}
+
+function toolLbl(ev) {
+  const v = {Read:'Lendo',Write:'Escrevendo',Edit:'Editando',Bash:'Executando',Glob:'Buscando',Grep:'Pesquisando'}[ev.name] || ev.name;
+  const d = ev.path ? ev.path.split('/').slice(-2).join('/') : (ev.command||'');
+  return v + (d ? ' '+d : '');
+}
+
+async function sendMessage() {
+  if (streaming) return;
+  const input = document.getElementById('inputMsg');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = ''; input.style.height = 'auto';
+  document.getElementById('sendBtn').disabled = true;
+  streaming = true;
+
+  addMsg('user', text);
+  const bubble = addMsg('assistant','');
+  bubble.innerHTML = '<span class="cursor"></span>';
+  let full = '';
+  const c = document.getElementById('messages');
+
+  try {
+    const res = await fetch('/api/chat', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ message:text, skill:currentSkill, session_id:sessionId })
+    });
+    const reader = res.body.getReader();
+    const dec = new TextDecoder();
+    let buf = '';
+    while (true) {
+      const {done, value} = await reader.read();
+      if (done) break;
+      buf += dec.decode(value, {stream:true});
+      const lines = buf.split('\n'); buf = lines.pop();
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        const data = line.slice(6).trim();
+        if (data === '[DONE]') break;
+        try {
+          const ev = JSON.parse(data);
+          if (ev.type==='session') { sessionId = ev.session_id; }
+          else if (ev.type==='text') { full += ev.text; bubble.innerHTML = fmt(full) + '<span class="cursor"></span>'; }
+          else if (ev.type==='tool') { const el=document.createElement('div'); el.className='tool-event'; el.innerHTML=`<span class="tool-dot"></span>${toolLbl(ev)}`; bubble.parentElement.insertBefore(el,bubble); }
+        } catch {}
+      }
+      c.scrollTop = c.scrollHeight;
+    }
+  } catch { full = 'Erro de conexão. Verifique se o servidor está rodando.'; }
+
+  bubble.innerHTML = fmt(full);
+  streaming = false;
+  document.getElementById('sendBtn').disabled = false;
+  document.getElementById('inputMsg').focus();
+}
+
+// ── CLIENT MODAL ──
+async function openClientModal() {
+  const modal = document.getElementById('clientModal');
+  const list  = document.getElementById('clientList');
+  modal.classList.remove('hidden');
+  list.innerHTML = '<div class="modal-loading">Buscando pastas…</div>';
+  try {
+    const clients = await fetch('/api/clientes').then(r => r.json());
+    if (!clients.length) {
+      list.innerHTML = '<div class="modal-loading">Nenhuma pasta encontrada em ' + 'agencia-claude/' + '</div>';
+      return;
+    }
+    list.innerHTML = clients.map(c => `
+      <div class="client-item ${c.active ? 'active' : ''}" onclick="selectClient('${c.pasta}')">
+        <div>
+          <div class="client-nome">${c.nome}</div>
+          <div class="client-pasta">${c.pasta}</div>
+        </div>
+        ${c.active ? `<div class="client-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>` : ''}
+      </div>`).join('');
+  } catch {
+    list.innerHTML = '<div class="modal-loading">Erro ao buscar pastas.</div>';
+  }
+}
+
+function closeClientModal(e) {
+  if (e.target === document.getElementById('clientModal')) {
+    document.getElementById('clientModal').classList.add('hidden');
+  }
+}
+
+async function browseFolder() {
+  const btn = document.getElementById('browseBtn');
+  btn.textContent = '…';
+  btn.disabled = true;
+  try {
+    const d = await fetch('/api/browse-folder').then(r => r.json());
+    if (!d.cancelled && d.path) {
+      document.getElementById('pathInput').value = d.path;
+    }
+  } catch { /* ignore */ }
+  btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;margin-right:4px;vertical-align:middle"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>Browse';
+  btn.disabled = false;
+}
+
+function selectByPath() {
+  const val = document.getElementById('pathInput').value.trim();
+  if (!val) return;
+  selectClient(null, val);
+}
+
+async function selectClient(pasta, fullPath) {
+  const body = fullPath ? { path: fullPath } : { pasta };
+  try {
+    const d = await fetch('/api/select-client', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(body)
+    }).then(r => r.json());
+    if (d.error) { alert(d.error); return; }
+    document.getElementById('clientModal').classList.add('hidden');
+    // Reset loaded cache so pages reload for the new client
+    Object.keys(loaded).forEach(k => delete loaded[k]);
+    sessionId = crypto.randomUUID();
+    currentSkill = 'chat';
+    document.getElementById('chatTitle').textContent = 'Chat livre';
+    document.getElementById('messages').innerHTML = `
+      <div class="empty-state" id="emptyState">
+        <div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>
+        <div class="empty-title">O que você precisa hoje?</div>
+        <div class="empty-sub">Selecione uma skill ou comece uma conversa livre.</div>
+      </div>`;
+    updateBrand(d.nome, d.pasta, d.responsavel || '');
+    loadHoje();
+    navigate('hoje');
+  } catch { alert('Erro ao selecionar cliente.'); }
+}
+
+function updateBrand(nome, pasta, responsavel) {
+  document.getElementById('empresaNome').textContent = nome;
+  document.getElementById('brandIcon').textContent = nome.charAt(0).toUpperCase();
+  document.getElementById('pastaNome').textContent = nome;
+  document.getElementById('hoje-eyebrow').textContent = nome.toUpperCase();
+
+  const displayName = (responsavel || nome).split(' ')[0];
+  document.getElementById('greetingName').textContent = displayName + '.';
+
+  const h = new Date().getHours();
+  document.getElementById('greetingTime').textContent = h < 12 ? 'Bom dia,' : h < 18 ? 'Boa tarde,' : 'Boa noite,';
+
+  const d = new Date();
+  document.getElementById('greetingDate').textContent = d.toLocaleDateString('pt-BR', { weekday:'long', day:'numeric', month:'long' });
+}
+
+// ── THEME ──
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') !== 'light';
+  const next = isDark ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem('theme', next);
+  document.getElementById('themeBtn').textContent = next === 'light' ? '🌙 Tema escuro' : '☀️ Tema claro';
+}
+(function(){
+  const t = localStorage.getItem('theme') || 'dark';
+  const btn = document.getElementById('themeBtn');
+  if (btn) btn.textContent = t === 'light' ? '🌙 Tema escuro' : '☀️ Tema claro';
+})();
+
+// ── INIT ──
+updateBrand('Espaço Vitta', 'espaco-vitta', 'Pedro');
+
+renderSkills();
+renderAcoes();
+loadHoje();
 </script>
 </body>
 </html>

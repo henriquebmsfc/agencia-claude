@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pitch — IA da Empresa</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ── TOKENS ── */
+    [data-theme="dark"] {
+      --bg:        #111827;
+      --bg2:       #1a2540;
+      --surface:   #1e3460;
+      --surface2:  #243a6a;
+      --border:    rgba(255,255,255,.08);
+      --accent:    #4ECBA3;
+      --accent-bg: rgba(78,203,163,.12);
+      --accent-bd: rgba(78,203,163,.25);
+      --t1:        rgba(255,255,255,.92);
+      --t2:        rgba(255,255,255,.65);
+      --t3:        rgba(255,255,255,.35);
+      --pill-bg:   rgba(255,255,255,.07);
+      --shadow:    0 4px 24px rgba(0,0,0,.4);
+      --card-bg:   #1a2540;
+    }
+    [data-theme="light"] {
+      --bg:        #f4f6f9;
+      --bg2:       #edf0f5;
+      --surface:   #ffffff;
+      --surface2:  #f0f4f8;
+      --border:    rgba(0,0,0,.08);
+      --accent:    #0e7a5e;
+      --accent-bg: rgba(14,122,94,.08);
+      --accent-bd: rgba(14,122,94,.2);
+      --t1:        #0f1623;
+      --t2:        #4a5568;
+      --t3:        #94a3b8;
+      --pill-bg:   rgba(0,0,0,.05);
+      --shadow:    0 4px 24px rgba(0,0,0,.08);
+      --card-bg:   #ffffff;
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body {
+      font-family:'Outfit',sans-serif;
+      background:var(--bg);
+      color:var(--t1);
+      line-height:1.6;
+      -webkit-font-smoothing:antialiased;
+      transition:background .25s, color .25s;
+    }
+
+    /* ── THEME TOGGLE ── */
+    .theme-toggle {
+      position:fixed; top:1.2rem; right:1.2rem; z-index:100;
+      display:flex; align-items:center; gap:.5rem;
+      padding:.4rem .8rem; border-radius:40px;
+      border:1px solid var(--border);
+      background:var(--surface);
+      cursor:pointer; font-family:'Outfit',sans-serif;
+      font-size:.72rem; font-weight:500; color:var(--t2);
+      box-shadow:var(--shadow);
+      transition:all .2s;
+    }
+    .theme-toggle:hover { color:var(--t1); }
+    .toggle-icon { font-size:.85rem; }
+
+    /* ── LAYOUT ── */
+    .page { max-width:780px; margin:0 auto; padding:4rem 1.5rem 6rem; }
+
+    /* ── HERO ── */
+    .hero { text-align:center; padding:3.5rem 0 3rem; }
+    .hero-pill {
+      display:inline-flex; align-items:center; gap:.4rem;
+      background:var(--accent-bg); border:1px solid var(--accent-bd);
+      color:var(--accent); border-radius:40px;
+      font-size:.7rem; font-weight:600; letter-spacing:.1em;
+      text-transform:uppercase; padding:.3rem .9rem;
+      margin-bottom:1.5rem;
+    }
+    .hero-pill::before { content:''; width:6px; height:6px; border-radius:50%; background:var(--accent); flex-shrink:0; }
+    .hero-title {
+      font-size:clamp(2rem,5vw,3.2rem);
+      font-weight:700; line-height:1.15;
+      letter-spacing:-.02em;
+      margin-bottom:1.2rem;
+    }
+    .hero-title em { font-style:normal; color:var(--accent); }
+    .hero-sub {
+      font-size:1.05rem; color:var(--t2); max-width:560px;
+      margin:0 auto 2.2rem; font-weight:400;
+    }
+    .hero-cta {
+      display:inline-block; padding:.75rem 2rem;
+      background:var(--accent); color:#fff;
+      border-radius:40px; font-size:.9rem; font-weight:600;
+      text-decoration:none; letter-spacing:.01em;
+      transition:opacity .15s;
+    }
+    [data-theme="light"] .hero-cta { color:#fff; }
+    .hero-cta:hover { opacity:.85; }
+
+    /* ── HOOK CARD ── */
+    .hook {
+      background:var(--card-bg);
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:2rem 2rem 2rem;
+      margin-bottom:2rem;
+      position:relative; overflow:hidden;
+      box-shadow:var(--shadow);
+    }
+    .hook::before {
+      content:''; position:absolute; top:0; left:0; right:0;
+      height:3px; background:linear-gradient(90deg,var(--accent),transparent);
+    }
+    .hook-quote {
+      font-size:1.1rem; color:var(--t1); font-weight:400;
+      line-height:1.7; font-style:italic;
+    }
+    .hook-quote strong { font-style:normal; color:var(--accent); font-weight:600; }
+
+    /* ── SECTION ── */
+    .section-label {
+      font-size:.65rem; font-weight:600; letter-spacing:.18em;
+      text-transform:uppercase; color:var(--t3);
+      margin-bottom:1rem;
+    }
+    .section-title {
+      font-size:1.5rem; font-weight:700; margin-bottom:.6rem;
+      letter-spacing:-.01em;
+    }
+    .section-sub { color:var(--t2); font-size:.92rem; margin-bottom:2rem; }
+
+    /* ── DELIVERABLES ── */
+    .deliverables { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:2.5rem; }
+    @media(max-width:520px){ .deliverables { grid-template-columns:1fr; } }
+
+    .card {
+      background:var(--card-bg);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:1.4rem 1.5rem;
+      box-shadow:var(--shadow);
+      transition:border-color .2s;
+    }
+    .card:hover { border-color:var(--accent-bd); }
+    .card-icon {
+      width:36px; height:36px; border-radius:10px;
+      background:var(--accent-bg); border:1px solid var(--accent-bd);
+      display:flex; align-items:center; justify-content:center;
+      font-size:1.1rem; margin-bottom:.9rem;
+    }
+    .card-title { font-size:.9rem; font-weight:600; margin-bottom:.35rem; }
+    .card-desc { font-size:.8rem; color:var(--t2); line-height:1.55; }
+
+    /* ── DIFFERENTIATOR ── */
+    .diff-block {
+      background:var(--card-bg);
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:2rem;
+      margin-bottom:2.5rem;
+      box-shadow:var(--shadow);
+    }
+    .diff-row { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; }
+    @media(max-width:520px){ .diff-row { grid-template-columns:1fr; } }
+
+    .diff-col-label {
+      font-size:.65rem; font-weight:600; letter-spacing:.14em;
+      text-transform:uppercase; margin-bottom:.75rem;
+    }
+    .diff-bad .diff-col-label { color:#f87171; }
+    .diff-good .diff-col-label { color:var(--accent); }
+
+    .diff-item {
+      display:flex; align-items:flex-start; gap:.55rem;
+      font-size:.83rem; color:var(--t2); margin-bottom:.6rem; line-height:1.5;
+    }
+    .diff-item::before {
+      content:''; width:16px; height:16px; border-radius:50%;
+      flex-shrink:0; margin-top:.15rem;
+      display:flex; align-items:center; justify-content:center;
+      font-size:.6rem;
+    }
+    .diff-bad .diff-item::before { background:rgba(248,113,113,.12); border:1px solid rgba(248,113,113,.3); content:'✕'; color:#f87171; display:grid; place-items:center; font-size:.55rem; }
+    .diff-good .diff-item::before { background:var(--accent-bg); border:1px solid var(--accent-bd); content:'✓'; color:var(--accent); display:grid; place-items:center; font-size:.6rem; }
+
+    .diff-divider {
+      display:flex; align-items:center; justify-content:center;
+      color:var(--t3); font-size:.75rem; gap:.4rem;
+    }
+    .diff-divider::before, .diff-divider::after {
+      content:''; flex:1; height:1px; background:var(--border);
+    }
+
+    /* ── OBJECTIONS ── */
+    .obj-list { display:flex; flex-direction:column; gap:.75rem; margin-bottom:2.5rem; }
+
+    details.obj {
+      background:var(--card-bg);
+      border:1px solid var(--border);
+      border-radius:12px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      transition:border-color .2s;
+    }
+    details.obj[open] { border-color:var(--accent-bd); }
+    details.obj summary {
+      padding:1rem 1.3rem;
+      font-size:.88rem; font-weight:500; cursor:pointer;
+      display:flex; align-items:center; justify-content:space-between;
+      list-style:none; color:var(--t1);
+    }
+    details.obj summary::-webkit-details-marker { display:none; }
+    details.obj summary::after {
+      content:'+'; font-size:1.1rem; color:var(--t3);
+      transition:transform .2s; font-weight:300;
+    }
+    details.obj[open] summary::after { transform:rotate(45deg); color:var(--accent); }
+    details.obj .obj-answer {
+      padding:.2rem 1.3rem 1.1rem;
+      font-size:.83rem; color:var(--t2); line-height:1.65;
+      border-top:1px solid var(--border);
+    }
+
+    /* ── CLOSING ── */
+    .closing {
+      text-align:center; padding:2.5rem 1rem;
+      background:var(--card-bg);
+      border:1px solid var(--border);
+      border-radius:16px;
+      box-shadow:var(--shadow);
+    }
+    .closing-title { font-size:1.4rem; font-weight:700; margin-bottom:.6rem; }
+    .closing-sub { color:var(--t2); font-size:.9rem; margin-bottom:1.5rem; max-width:400px; margin-left:auto; margin-right:auto; }
+    .closing-badges { display:flex; align-items:center; justify-content:center; gap:.6rem; flex-wrap:wrap; }
+    .badge {
+      display:inline-flex; align-items:center; gap:.3rem;
+      padding:.28rem .75rem; border-radius:40px;
+      background:var(--pill-bg); border:1px solid var(--border);
+      font-size:.72rem; color:var(--t2); font-weight:500;
+    }
+    .badge-dot { width:5px; height:5px; border-radius:50%; background:var(--accent); }
+
+    /* ── DIVIDER ── */
+    .divider { height:1px; background:var(--border); margin:2.5rem 0; }
+  </style>
+</head>
+<body>
+
+<button class="theme-toggle" onclick="toggleTheme()">
+  <span class="toggle-icon" id="toggleIcon">☀️</span>
+  <span id="toggleLabel">Versão clara</span>
+</button>
+
+<div class="page">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-pill">IA instalada no seu negócio</div>
+    <h1 class="hero-title">A IA que já nasce sabendo<br>tudo sobre <em>sua empresa</em></h1>
+    <p class="hero-sub">Não é o ChatGPT genérico. É uma versão do Claude configurada com seus produtos, preços, tom de voz e processos — pronta para usar no dia a dia.</p>
+  </section>
+
+  <!-- HOOK -->
+  <div class="hook">
+    <p class="hook-quote">Você já usou o ChatGPT no negócio? O problema é que <strong>toda vez que abre, precisa explicar tudo de novo</strong> — o que vende, quanto custa, como atende, pra quem é. É como um funcionário que perde a memória toda vez que vai embora.</p>
+  </div>
+
+  <!-- DELIVERABLES -->
+  <p class="section-label">O que você recebe</p>
+  <h2 class="section-title">Pacote completo em duas semanas</h2>
+  <p class="section-sub">Projeto fechado, sem mensalidade. Você paga uma vez e fica com o sistema.</p>
+
+  <div class="deliverables">
+    <div class="card">
+      <div class="card-icon">🧠</div>
+      <div class="card-title">IA da sua empresa</div>
+      <div class="card-desc">Claude configurado com tudo sobre o negócio. Produtos, preços, tom de voz, como você atende. Sem precisar explicar nada de novo.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🌐</div>
+      <div class="card-title">Site de conversão</div>
+      <div class="card-desc">Não é portfólio bonito. É uma página que mostra o que você faz, quanto custa e leva o cliente direto para o WhatsApp.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔗</div>
+      <div class="card-title">Link page do Instagram</div>
+      <div class="card-desc">Substitui o Linktree pago. Centraliza todos os seus links numa página com a cara da sua marca.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">⚡</div>
+      <div class="card-title">Skills de conteúdo</div>
+      <div class="card-desc">Carrossel, legenda, proposta, resposta para cliente. Um prompt e o conteúdo sai no tom certo, com os seus produtos.</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- DIFFERENTIATOR -->
+  <p class="section-label">Por que é diferente</p>
+  <h2 class="section-title">IA genérica vs. IA da sua empresa</h2>
+  <p class="section-sub">A diferença não está na ferramenta — está no contexto que ela carrega.</p>
+
+  <div class="diff-block">
+    <div class="diff-row">
+      <div class="diff-col diff-bad">
+        <div class="diff-col-label">ChatGPT / Claude genérico</div>
+        <div class="diff-item">Precisa explicar seus produtos toda vez</div>
+        <div class="diff-item">Não sabe seu tom de voz ou como você atende</div>
+        <div class="diff-item">Respostas genéricas sem contexto do negócio</div>
+        <div class="diff-item">Você adapta o conteúdo antes de usar</div>
+      </div>
+      <div class="diff-col diff-good">
+        <div class="diff-col-label">IA da sua empresa</div>
+        <div class="diff-item">Já sabe tudo — produtos, preços, processos</div>
+        <div class="diff-item">Responde com o seu tom, para o seu público</div>
+        <div class="diff-item">Conteúdo pronto para usar, sem edição</div>
+        <div class="diff-item">Você só dá o comando</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- OBJECTIONS -->
+  <p class="section-label">Perguntas frequentes</p>
+  <h2 class="section-title" style="margin-bottom:1.5rem">Respostas diretas</h2>
+
+  <div class="obj-list">
+    <details class="obj">
+      <summary>"Já uso ChatGPT / já uso Claude"</summary>
+      <div class="obj-answer">Ótimo — isso facilita. Mas tem uma diferença enorme entre usar uma IA genérica e ter uma IA treinada com o seu negócio. Hoje você precisa explicar seus produtos, seu tom, suas políticas toda vez que abre. Com a IA da sua empresa, ela já sabe tudo isso. Você só dá o comando.</div>
+    </details>
+    <details class="obj">
+      <summary>"Já tenho site"</summary>
+      <div class="obj-answer">Perfeito. A gente avalia o que tem — se estiver funcionando bem, não mexemos. Se tiver desatualizado, com link quebrado ou sem CTA claro, a gente refaz. O site faz parte do pacote, mas o foco principal é a IA e as skills.</div>
+    </details>
+    <details class="obj">
+      <summary>"Não tenho tempo para isso agora"</summary>
+      <div class="obj-answer">O onboarding com a gente é uma conversa de uma hora onde você fala do seu negócio. A gente absorve tudo e monta. Você não precisa aprender ferramenta nem configurar nada — só valida o que a gente entrega. Seu tempo de envolvimento é mínimo.</div>
+    </details>
+    <details class="obj">
+      <summary>"É caro"</summary>
+      <div class="obj-answer">O pacote substitui o que você pagaria para um designer fazer o site, uma agência de social media fazer conteúdo todo mês, e ainda entrega a IA do negócio que você usaria para sempre. É projeto fechado — você paga uma vez e fica com o sistema.</div>
+    </details>
+    <details class="obj">
+      <summary>"Meu negócio é pequeno, não sei se compensa"</summary>
+      <div class="obj-answer">Foi exatamente para negócios menores que a gente montou isso. Quanto menor o negócio, mais o dono faz tudo sozinho — e mais tempo ele perde em tarefa que a IA resolve em segundos. O impacto é proporcionalmente maior.</div>
+    </details>
+    <details class="obj">
+      <summary>"Não sei se meu time vai usar"</summary>
+      <div class="obj-answer">O pacote base é para o dono, não para o time. Você começa usando sozinho — para responder cliente, criar conteúdo, montar proposta. Se quiser expandir para o time depois, a gente avalia no diagnóstico pós-entrega.</div>
+    </details>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- CLOSING -->
+  <div class="closing">
+    <h2 class="closing-title">Duas semanas. Projeto fechado.</h2>
+    <p class="closing-sub">Uma conversa de uma hora para absorver o negócio. Você valida. Pronto.</p>
+    <div class="closing-badges">
+      <span class="badge"><span class="badge-dot"></span>Sem mensalidade</span>
+      <span class="badge"><span class="badge-dot"></span>Entrega em 2 semanas</span>
+      <span class="badge"><span class="badge-dot"></span>Onboarding incluído</span>
+      <span class="badge"><span class="badge-dot"></span>Sem agência depois</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function toggleTheme() {
+    const html = document.documentElement;
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    document.getElementById('toggleIcon').textContent = isDark ? '🌙' : '☀️';
+    document.getElementById('toggleLabel').textContent = isDark ? 'Versão escura' : 'Versão clara';
+  }
+</script>
+</body>
+</html>

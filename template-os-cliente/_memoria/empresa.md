@@ -1,5 +1,8 @@
 # Empresa
 
+## Responsável
+- Nome: [nome da pessoa responsável pelo negócio]
+
 ## Sobre o negócio
 [Descrição do que a empresa faz — preenchido no /instalar]
 
